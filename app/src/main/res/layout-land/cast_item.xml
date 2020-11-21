@@ -15,10 +15,11 @@
         android:orientation="vertical"
         tools:ignore="UseCompoundDrawables">
 
+
         <ImageView
             android:id="@+id/castImage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             app:srcCompat="@drawable/movie"
             tools:ignore="ContentDescription" />
 
@@ -29,6 +30,5 @@
             android:layout_height="wrap_content"
             android:text="Robert Downey Jr."
             tools:ignore="HardcodedText" />
-
     </LinearLayout>
 </FrameLayout>

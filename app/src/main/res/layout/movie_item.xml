@@ -27,7 +27,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="+13"
+        android:text="@string/pg"
+
+        android:textAppearance="@style/TextStyle"
         app:layout_constraintBottom_toTopOf="@id/labelText"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
@@ -40,7 +42,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Avengers: \nEnd Game"
+        android:maxLines="2"
+        android:text="@string/label_text"
+
+        android:textAppearance="@style/TextStyle"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintHorizontal_bias="0.0"
@@ -56,10 +61,12 @@
 
     <TextView
         android:id="@+id/keywordsText"
-        android:layout_width="0dp"
         style="@style/MovieItem.Keywords"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Action, Adventure, Fantasy"
+
+        android:text="@string/keywordsText"
+        android:textAppearance="@style/TextStyle"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/labelText" />
@@ -67,13 +74,13 @@
     <RatingBar
         android:id="@+id/ratingBar"
         style="@style/Theme.Movie42.RatingBar"
-        android:theme="@style/Theme.Movie42.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:numStars="5"
         android:rating="4"
         android:stepSize="1"
+        android:theme="@style/Theme.Movie42.RatingBar"
         app:layout_constraintBottom_toTopOf="@id/storyLineHeadText"
         app:layout_constraintEnd_toStartOf="@id/reviewsText"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
@@ -85,7 +92,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="125 Reviews"
+        android:text="@string/reviewsText"
+
+        android:textAppearance="@style/TextStyle"
         app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toEndOf="@+id/ratingBar"
@@ -97,7 +106,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Storyline"
+        android:text="@string/storyLineHeadText"
+        android:textAppearance="@style/TextStyle"
+
         app:layout_constraintBottom_toTopOf="@id/descriptionText"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
@@ -109,19 +120,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe."
-        app:layout_constraintBottom_toTopOf="@id/textView5"
+        android:text="@string/descriptionText"
+        android:textAppearance="@style/TextStyle"
+        app:layout_constraintBottom_toTopOf="@id/castHeadText"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/storyLineHeadText" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/castHeadText"
         style="@style/MovieItem.LineHeadText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Cast"
+        android:text="@string/castHeadText"
+        android:textAppearance="@style/TextStyle"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/recycleCast"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
@@ -132,14 +145,14 @@
         android:id="@+id/recycleCast"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:itemCount="2"
-        android:layout_centerVertical="true"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView5"
+        app:layout_constraintTop_toBottomOf="@id/castHeadText"
+        tools:itemCount="2"
         tools:listitem="@layout/cast_item" />
 
 

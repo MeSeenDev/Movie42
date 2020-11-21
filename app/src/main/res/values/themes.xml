@@ -1,8 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="Theme.Movie42" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Movie42" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <!-- Primary brand color. -->
+        <item name="android:background">@color/background</item>
+        <item name="android:textAppearance">@style/TextStyle</item>
         <item name="colorPrimary">@color/star_false</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -18,7 +20,7 @@
 
 
     <!--  Movie Item Style -->
-    <style name="Theme.Movie42.MovieItems"></style>
+    <style name="Theme.Movie42.MovieItems" />
 
 
     <style name="MovieItem.PG" parent="Theme.Movie42.MovieItems">
@@ -45,7 +47,7 @@
     </style>
 
     <style name="CustomRatingBar" parent="Theme.AppCompat">
-        <item name="android:progressDrawable">@drawable/ratingbar</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_custom</item>
         <item name="android:minHeight">8dp</item>
         <item name="android:maxHeight">80dp</item>
     </style>
@@ -95,6 +97,11 @@
         <item name="android:layout_marginTop">4dp</item>
         <item name="fontFamily">@font/roboto_black</item>
         <item name="android:lines">2</item>
+        <item name="android:textColor">@color/base_text</item>
+    </style>
+
+    <style name="TextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/base_text</item>
     </style>
 
