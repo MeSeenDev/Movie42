@@ -3,7 +3,6 @@
     <!-- Base application theme. -->
     <style name="Theme.Movie42" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <!-- Primary brand color. -->
-        <item name="android:background">@color/background</item>
         <item name="android:textAppearance">@style/TextStyle</item>
         <item name="colorPrimary">@color/star_false</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -46,10 +45,12 @@
         <item name="android:lines">1</item>
     </style>
 
-    <style name="CustomRatingBar" parent="Theme.AppCompat">
-        <item name="android:progressDrawable">@drawable/ratingbar_custom</item>
-        <item name="android:minHeight">8dp</item>
-        <item name="android:maxHeight">80dp</item>
+    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar">
+
+        <item name="colorControlNormal">@color/star_false</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+
+
     </style>
 
     <style name="Theme.Movie42.RatingBar" parent="Widget.AppCompat.RatingBar.Small">
