@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/castParent"
+    style="@style/Cast"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:background="@color/background">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="UseCompoundDrawables">
+
+
+        <ImageView
+            android:id="@+id/castImage"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:srcCompat="@drawable/movie"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/castText"
+            style="@style/Cast.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Robert Downey Jr."
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+</FrameLayout>
