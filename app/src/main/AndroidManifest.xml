@@ -10,8 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Movie42"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".MovieDetailsActivity"
-            android:parentActivityName=".MainActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

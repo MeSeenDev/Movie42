@@ -1,37 +1,28 @@
 package ru.meseen.dev.androidacademy
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import ru.meseen.dev.androidacademy.adapter.MassiveAdapter
+import ru.meseen.dev.androidacademy.Helper.MOVIE_LIST
 import ru.meseen.dev.androidacademy.data.CastData
-import ru.meseen.dev.androidacademy.data.DataKeys.DATA_KEY
-import ru.meseen.dev.androidacademy.data.DataKeys.MAIN_TYPE
 import ru.meseen.dev.androidacademy.data.MovieData
+import ru.meseen.dev.androidacademy.fragments.FragmentMoviesList
 
-class MainActivity : AppCompatActivity(), MassiveAdapter.RecycleClickListener {
-    private lateinit var recyclerView: RecyclerView
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.recycleMain)
-        val adapter = MassiveAdapter(getTempData(), this, application, MAIN_TYPE)
-        recyclerView.adapter = adapter
-        val gridLayoutManager = GridLayoutManager(this, 2)
-
-        gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
-
-        recyclerView.layoutManager = gridLayoutManager
-
-
+        val fragmentManager = supportFragmentManager.beginTransaction()
+        fragmentManager.add(R.id.activity_main_frame,
+            FragmentMoviesList.getInstance(application, getTempData()),
+            MOVIE_LIST.toString()
+        )
+        fragmentManager.commit()
     }
 
 
-    private fun getTempData(): List<MovieData> {
-        val list = mutableListOf<MovieData>()
+    private fun getTempData(): ArrayList<MovieData> {
+        val list = ArrayList<MovieData>()
 
         list.add(
             MovieData(
@@ -79,20 +70,20 @@ class MainActivity : AppCompatActivity(), MassiveAdapter.RecycleClickListener {
                 descriptionText = resources.getString(R.string.descriptionText1)
             )
         )
-        list.add(MovieData( pg = 13,
-            labelText = resources.getString(R.string.label_text2),
-            keywordsText = resources.getString(R.string.keywordsText2),
-            reviewsStars = 5,
-            movieLength = 120,
-            drawable = R.drawable.main_movie2,
-            reviewsText = resources.getString(R.string.reviewsText2),
-            descriptionText = resources.getString(R.string.descriptionText2)))
+        list.add(
+            MovieData(
+                pg = 13,
+                labelText = resources.getString(R.string.label_text2),
+                keywordsText = resources.getString(R.string.keywordsText2),
+                reviewsStars = 5,
+                movieLength = 120,
+                drawable = R.drawable.main_movie2,
+                reviewsText = resources.getString(R.string.reviewsText2),
+                descriptionText = resources.getString(R.string.descriptionText2)
+            )
+        )
         return list
     }
 
-    override fun onClick(item: MovieData) {
-        val intent = Intent(this, MovieDetailsActivity::class.java)
-        intent.putExtra(DATA_KEY.toString(), item)
-        startActivity(intent)
-    }
+
 }

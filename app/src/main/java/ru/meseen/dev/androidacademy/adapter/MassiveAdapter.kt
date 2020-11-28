@@ -25,6 +25,7 @@ class MassiveAdapter(
             val mainViewHolder = MainViewHolder(view)
             mainViewHolder.favImageView.setOnClickListener {
                 mainViewHolder.favImageView.setImageResource(R.drawable.ic_baseline_favorite_true)
+
             }
             mainViewHolder.goupView.setOnClickListener {
                 listener?.onClick(list[mainViewHolder.adapterPosition])

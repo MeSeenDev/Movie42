@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    tools:showIn="@layout/activity_movie_details">
+    tools:showIn="@layout/fragment_movies_details">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_start"

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
     android:layout_gravity="center"
-
-
     tools:ignore="SmallSp">
 
     <com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="170dp"
-        android:layout_height="296dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:cardBackgroundColor="@color/background"
         app:cardCornerRadius="8dp"
         app:strokeColor="#404056"
@@ -50,14 +51,15 @@
                 app:srcCompat="@drawable/main_movie"
                 tools:ignore="ContentDescription" />
 
-            <View
+            <ImageView
                 android:layout_width="166dp"
                 android:layout_height="248dp"
-                android:background="@drawable/shape"
+                android:contentDescription="Movie Poster"
                 app:layout_constraintBottom_toTopOf="@id/labelMainText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/shape" />
 
             <TextView
                 android:id="@+id/keywordsText"
@@ -82,10 +84,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="2dp"
+                android:background="@android:color/transparent"
                 android:numStars="5"
                 android:rating="0"
                 android:stepSize="1"
-                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="@+id/imageMainItemView"
                 app:layout_constraintEnd_toStartOf="@id/reviewsText"
                 app:layout_constraintStart_toEndOf="@+id/guideline_start"
@@ -129,7 +131,7 @@
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto_black"
                 android:text="137MIN"
-                android:textColor="@color/star_false"
+                android:textColor="@color/colorPrimary"
                 android:textSize="8sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -138,11 +140,14 @@
 
             <ImageView
                 android:id="@+id/favImageView"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="13dp"
                 android:alpha="0.75"
                 android:background="@android:color/transparent"
+                android:minWidth="24dp"
+                android:minHeight="22dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_favorite_24"

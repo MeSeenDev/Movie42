@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="app_bar_height">280dp</dimen>
+    <dimen name="main_item_decoration_size">18dp</dimen>
 
 </resources>
