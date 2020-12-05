@@ -5,42 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:ignore="Overdraw">
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/movies_list_toolbar"
         style="@style/MainToolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintBottom_toTopOf="@id/recycleMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         app:navigationIcon="@drawable/ic_combined_shape"
         app:title="Movies list" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleMain"
-        android:layout_width="match_parent"
+        style="@style/MovieList.RecycleView"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:layout_constraintVertical_bias="0.0"
-        app:spanCount="2"
+        app:layout_constraintTop_toBottomOf="@+id/movies_list_toolbar"
         tools:itemCount="4"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/main_item"
-        tools:padding="@dimen/main_item_decoration_size" />
+        tools:spanCount="2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,23 +11,23 @@ import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
-import ru.meseen.dev.androidacademy.Helper.MOVIE_LIST
+import ru.meseen.dev.androidacademy.FragmentsTags
 import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.adapter.MassiveAdapter
+import ru.meseen.dev.androidacademy.adapter.ListMassiveAdapter
 import ru.meseen.dev.androidacademy.data.DataKeys
-import ru.meseen.dev.androidacademy.data.MovieData
+import ru.meseen.dev.androidacademy.data.entity.MovieEntity
 
-class FragmentMoviesDetails() : Fragment() {
+class FragmentMoviesDetails : Fragment() {
 
     private lateinit var navBack: MaterialTextView
     private lateinit var toolBarImage: ImageView
 
     private lateinit var application: Application
-    private lateinit var movieData: MovieData
+    private lateinit var movieData: MovieEntity
 
     companion object {
         private const val MOVIE_ITEM_KEY = "MOVIE_ITEM_KEY"
-        fun getInstance(application: Application, movieData: MovieData): Fragment {
+        fun getInstance(application: Application, movieData: MovieEntity): Fragment {
             val instance = FragmentMoviesDetails()
             val bundle = Bundle()
             bundle.putParcelable(MOVIE_ITEM_KEY, movieData)
@@ -40,8 +40,8 @@ class FragmentMoviesDetails() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
-        movieData = arguments?.getParcelable<MovieData>(MOVIE_ITEM_KEY) ?: MovieData()
+        retainInstance  = true
+        movieData = arguments?.getParcelable(MOVIE_ITEM_KEY) ?: MovieEntity()
     }
 
     override fun onCreateView(
@@ -57,13 +57,17 @@ class FragmentMoviesDetails() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navBack = view.findViewById(R.id.home)
         navBack.setOnClickListener {
-                fragmentManager?.popBackStack(MOVIE_LIST.toString(),POP_BACK_STACK_INCLUSIVE)
+            parentFragmentManager.popBackStack(FragmentsTags.MOVIE_LIST_TAG.toString(),POP_BACK_STACK_INCLUSIVE)
         }
         toolBarImage = view.findViewById(R.id.app_bar_image)
         val recyclerView = view.findViewById<RecyclerView>(R.id.detailRecycleView)
         recyclerView.layoutManager = LinearLayoutManager(application)
-        val adapter = MassiveAdapter(listOf(movieData), null, application, DataKeys.DETAILS_TYPE)
+        val adapter = ListMassiveAdapter( null, application, DataKeys.DETAILS_TYPE)
+        movieData.let {
+            adapter.submitList(listOf(it))
+        }
         recyclerView.adapter = adapter
 
     }
+
 }

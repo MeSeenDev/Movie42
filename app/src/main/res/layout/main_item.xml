@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_centerVertical="true"
-    android:layout_gravity="center"
+    android:layout_marginBottom="@dimen/movie_main_item_parent_margin_bottom"
     tools:ignore="SmallSp">
 
-    <com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        app:cardBackgroundColor="@color/background"
-        app:cardCornerRadius="8dp"
-        app:strokeColor="#404056"
-        app:strokeWidth="2dp"
+        style="@style/MainItem.MaterialCardView"
         tools:ignore="HardcodedText">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,6 +38,7 @@
                 android:id="@+id/imageMainItemView"
                 android:layout_width="166dp"
                 android:layout_height="248dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@id/labelMainText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,42 +46,42 @@
                 app:srcCompat="@drawable/main_movie"
                 tools:ignore="ContentDescription" />
 
-            <ImageView
+
+
+            <View
+                android:id="@+id/movie_shape"
                 android:layout_width="166dp"
                 android:layout_height="248dp"
+                android:background="@drawable/shape"
                 android:contentDescription="Movie Poster"
                 app:layout_constraintBottom_toTopOf="@id/labelMainText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/shape" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/keywordsText"
-                style="@style/MovieItem.Keywords"
+                style="@style/MainItem.Keywords"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@android:color/transparent"
-                android:text="Action, Adventure, Fantasy"
-                android:textSize="8sp"
+                android:layout_marginBottom="@dimen/movie_main_item_keywordtext_margin_bottom"
+                android:text="@string/lorem_keywordstext"
                 app:layout_constraintBottom_toTopOf="@+id/ratingBar"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@id/guideline_center"
                 tools:ignore="HardcodedText,SmallSp" />
 
-            <RatingBar
+            <com.grdk.ratingbarsvg.RatingBarSvg
                 android:id="@+id/ratingBar"
-                style="@style/Theme.Movie42.RatingBar"
+                style="@style/MainItem.RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="2dp"
-                android:background="@android:color/transparent"
+                android:progressDrawable="@drawable/ratingbar_svg_selector_8"
+                android:layout_marginBottom="@dimen/movie_main_item_ratingbar_margin_bottom"
                 android:numStars="5"
-                android:rating="0"
+                android:rating="5"
                 android:stepSize="1"
                 app:layout_constraintBottom_toBottomOf="@+id/imageMainItemView"
                 app:layout_constraintEnd_toStartOf="@id/reviewsText"
@@ -96,29 +91,22 @@
 
             <TextView
                 android:id="@+id/reviewsText"
-                style="@style/MovieItem.RatingBarText"
+                style="@style/MainItem.ReviewsText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@android:color/transparent"
-                android:text="125 Reviews"
-                android:textSize="8sp"
-
+                android:layout_marginStart="@dimen/movie_main_item_reviewstext_margin_start"
+                android:text="@string/lorem_reviews"
                 app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end"
                 app:layout_constraintStart_toEndOf="@+id/ratingBar"
-                app:layout_constraintTop_toTopOf="@+id/ratingBar"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toTopOf="@+id/ratingBar" />
 
             <TextView
                 android:id="@+id/labelMainText"
+                style="@style/MainItem.Label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/roboto_black"
-                android:text="Avengers: End Game"
-                android:textColor="@color/base_text"
-                android:textSize="14sp"
+                android:text="@string/lorem_label"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@+id/imageMainItemView" />
@@ -130,9 +118,9 @@
                 android:layout_marginBottom="8dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto_black"
-                android:text="137MIN"
+                android:text="@string/lorem_movielengthtext"
                 android:textColor="@color/colorPrimary"
-                android:textSize="8sp"
+                android:textSize="@dimen/movie_main_item_movielengthtext_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
@@ -141,31 +129,28 @@
             <ImageView
                 android:id="@+id/favImageView"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
-                android:alpha="0.75"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="@dimen/movie_main_item_pgmaintext_favimageview_margin_top"
+                android:foregroundGravity="top"
                 android:background="@android:color/transparent"
-                android:minWidth="24dp"
-                android:minHeight="22dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_baseline_favorite_24"
+                app:srcCompat="@drawable/ic_baseline_favorite_false"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/pgMainText"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="@dimen/movie_main_item_pgmaintext_favimageview_margin_top"
                 android:background="@drawable/card"
                 android:fontFamily="@font/roboto_black"
                 android:gravity="center"
-                android:text="+13"
+                android:text="@string/lorem_pdmaintext"
                 android:textColor="@color/base_text"
-                android:textSize="12sp"
+                android:textSize="@dimen/movie_main_item_pgmaintext_size"
                 android:textStyle="normal"
-                app:layout_constraintCircleRadius="80dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 app:layout_constraintTop_toTopOf="parent" />
 

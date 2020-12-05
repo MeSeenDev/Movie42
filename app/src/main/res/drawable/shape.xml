@@ -5,64 +5,12 @@
 
             <gradient
                 android:angle="90"
-                android:centerColor="#00FFFFFF"
+                android:centerColor="@color/center_of_shape"
                 android:centerX="0.6"
-                android:endColor="#08191926"
-                android:startColor="#191926"
+                android:endColor="@color/end_of_shape"
+                android:startColor="@color/start_of_shape"
                 android:type="linear" />
-
-
-            <corners android:radius="0dp" />
         </shape>
     </item>
-<!--
-    <item>
-        <shape android:shape="rectangle">
-
-            <gradient
-                android:angle="90"
-                android:centerColor="#00FFFFFF"
-                android:centerX="0.5"
-                android:endColor="@color/background_tint"
-                android:startColor="@color/background"
-                android:type="linear" />
-
-
-            <corners android:radius="0dp" />
-        </shape>
-    </item>
--->
-
-   <!-- <item>
-        <shape android:shape="rectangle">
-
-            <gradient
-                android:angle="90"
-                android:centerColor="#00FFFFFF"
-                android:centerX="0.25"
-                android:endColor="@color/background_tint"
-                android:startColor="@color/background"
-                android:type="linear" />
-
-
-            <corners android:radius="0dp" />
-        </shape>
-    </item>
--->
-    <!--<item>
-        <shape android:shape="rectangle">
-
-            <gradient
-                android:angle="90"
-                android:centerColor="#00FFFFFF"
-                android:centerX="0.2"
-                android:endColor="#08191926"
-                android:startColor="@color/background"
-                android:type="linear" />
-
-
-            <corners android:radius="0dp" />
-        </shape>
-    </item>-->
 
 </layer-list>

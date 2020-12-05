@@ -2,6 +2,33 @@
 <resources>
 
     <dimen name="app_bar_height">280dp</dimen>
-    <dimen name="main_item_decoration_size">18dp</dimen>
+    <dimen name="card_maxWidth">170dp</dimen>
+    <dimen name="card_maxHeight">296dp</dimen>
+    <dimen name="cast_image_width">80dp</dimen>
+    <dimen name="cast_image_height">80dp</dimen>
+    <dimen name="movie_details_nested_overlap_top">78dp</dimen>
+    <dimen name="movie_details_back_button_height">56dp</dimen>
+    <dimen name="movie_details_back_button_margin_start">18dp</dimen>
+    <dimen name="movie_details_back_button_margin_top">36dp</dimen>
+    <dimen name="movie_details_back_button_drawable_padding">8dp</dimen>
+    <dimen name="movie_details_back_button_padding">16dp</dimen>
+    <dimen name="movie_details_back_button_text_size">12sp</dimen>
+    <dimen name="movie_details_recycle_view_padding_bottom">80dp</dimen>
+    <dimen name="movie_details_guideline_top">190dp</dimen>
+    <dimen name="movie_details_guideline_bottom">290dp</dimen>
+    <dimen name="movie_main_item_parent_margin_bottom">16dp</dimen>
+    <dimen name="movie_main_item_card_corner_radius">8dp</dimen>
+    <dimen name="movie_main_item_card_stroke_width">2dp</dimen>
+    <dimen name="movie_main_item_keywordtext_size">8sp</dimen>
+    <dimen name="movie_main_item_reviewstext_size">8sp</dimen>
+    <dimen name="movie_main_item_labelmaintext_size">14sp</dimen>
+    <dimen name="movie_main_item_movielengthtext_size">8sp</dimen>
+    <dimen name="movie_main_item_reviewstext_margin_start">8dp</dimen>
+    <dimen name="movie_main_item_pgmaintext_size">12sp</dimen>
+    <dimen name="movie_main_item_pgmaintext_favimageview_margin_top">12dp</dimen>
+    <dimen name="movie_main_item_keywordtext_margin_bottom">8dp</dimen>
+    <dimen name="movie_main_item_ratingbar_margin_bottom">2dp</dimen>
+
+
 
 </resources>
