@@ -58,6 +58,7 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycleMain)
+        recyclerView.setHasFixedSize(true)
         val adapter = ListMassiveAdapter(this, application, DataKeys.MAIN_TYPE)
         movieViewModel.allWords.observe(viewLifecycleOwner, {
             it.let {

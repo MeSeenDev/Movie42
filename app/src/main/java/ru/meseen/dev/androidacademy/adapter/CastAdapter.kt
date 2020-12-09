@@ -17,24 +17,6 @@ import ru.meseen.dev.androidacademy.data.CastData
 class CastAdapter :
     ListAdapter<CastData, RecyclerView.ViewHolder>(MOVIE_DETAIL_COMPARATOR) {
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cast_item, parent, false)
-        val vh = CastViewHolder(view)
-        vh.castParent.setOnClickListener {
-            Snackbar.make(it, "Actor ${getItem(vh.adapterPosition).name}", Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(parent.context,R.color.colorPrimary))
-                .show()
-        }
-        return vh
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is CastViewHolder) {
-            holder.bind(getItem(position))
-        }
-    }
-
     companion object {
         private val MOVIE_DETAIL_COMPARATOR = object : DiffUtil.ItemCallback<CastData>() {
             override fun areItemsTheSame(oldItem: CastData, newItem: CastData): Boolean {
@@ -45,6 +27,23 @@ class CastAdapter :
                 return oldItem.name == newItem.name
                         && oldItem.drawable == newItem.drawable
             }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cast_item, parent, false)
+        val vh = CastViewHolder(view)
+        vh.castParent.setOnClickListener {
+            Snackbar.make(it, "Actor ${getItem(vh.adapterPosition).name}", Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(parent.context, R.color.colorPrimary))
+                .show()
+        }
+        return vh
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is CastViewHolder) {
+            holder.bind(getItem(position))
         }
     }
 
