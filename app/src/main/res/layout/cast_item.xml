@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/castImage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/cast_image_width"
+            android:layout_height="@dimen/cast_image_height"
             app:srcCompat="@drawable/movie"
             tools:ignore="ContentDescription" />
 
