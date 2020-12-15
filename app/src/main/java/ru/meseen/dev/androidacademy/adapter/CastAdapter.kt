@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.data.CastData
@@ -25,7 +27,7 @@ class CastAdapter :
 
             override fun areContentsTheSame(oldItem: CastData, newItem: CastData): Boolean {
                 return oldItem.name == newItem.name
-                        && oldItem.drawable == newItem.drawable
+                        && oldItem.drawableUrl == newItem.drawableUrl
             }
         }
     }
@@ -55,9 +57,15 @@ class CastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val castView: ImageView = itemView.findViewById(R.id.castImage)
     private val castText: TextView = itemView.findViewById(R.id.castText)
 
-    fun bind(item: CastData){
+    fun bind(item: CastData) {
         castText.text = item.name
-        castView.setImageResource(item.drawable)
+
+        Glide.with(itemView.context)
+            .load(item.drawableUrl)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .centerCrop()
+            .into(castView)
+
     }
 
 }

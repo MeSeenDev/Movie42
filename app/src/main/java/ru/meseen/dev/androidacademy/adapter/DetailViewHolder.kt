@@ -11,24 +11,31 @@ import ru.meseen.dev.androidacademy.data.entity.MovieEntity
 
 class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    var pgMainText: TextView = itemView.findViewById(R.id.pgText)
-    var labelText: TextView = itemView.findViewById(R.id.labelText)
-    var reviewsText: TextView = itemView.findViewById(R.id.reviewsText)
-    var keywordsText: TextView = itemView.findViewById(R.id.keywordsText)
-    var descriptionText: TextView = itemView.findViewById(R.id.descriptionText)
-    var recycleCast: RecyclerView = itemView.findViewById(R.id.recycleCast)
-    var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
+    private var pgMainText: TextView = itemView.findViewById(R.id.pgText)
+    private var labelText: TextView = itemView.findViewById(R.id.labelText)
+    private var reviewsText: TextView = itemView.findViewById(R.id.reviewsText)
+    private var keywordsText: TextView = itemView.findViewById(R.id.keywordsText)
+    private var descriptionText: TextView = itemView.findViewById(R.id.descriptionText)
+    private var recycleCast: RecyclerView = itemView.findViewById(R.id.recycleCast)
+    private var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
+
 
     fun bind(itemMovieData: MovieEntity, application: Application) {
-        var temp = itemMovieData.labelText.replaceFirst(" ", "\n")
+        var temp: String = if (itemMovieData.labelText.split(" ").size > 1) {
+            itemMovieData.labelText.replaceFirst(" ", "\n")
+        } else {
+            itemMovieData.labelText
+        }
         labelText.text = temp
-        temp = itemMovieData.pg.toString() + "+"
+        temp = itemMovieData.PgRating.toString() + "+"
         pgMainText.text = temp
         descriptionText.text = itemMovieData.descriptionText
-        keywordsText.text = itemMovieData.keywordsText
-        reviewsText.text = itemMovieData.reviewsText
-        ratingBar.rating = itemMovieData.reviewsStars.toFloat()
-        reviewsText.text = itemMovieData.reviewsText
+        temp = itemMovieData.genres.joinToString { it.name }
+        keywordsText.text = temp
+        temp = "${itemMovieData.reviewsText} REVIEWS"
+        reviewsText.text = temp
+
+        ratingBar.rating = itemMovieData.ratings
 
         val adapter = CastAdapter()
         itemMovieData.cast.let {

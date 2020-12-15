@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.textview.MaterialTextView
 import ru.meseen.dev.androidacademy.FragmentsTags
 import ru.meseen.dev.androidacademy.R
@@ -40,7 +42,7 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance  = true
+        retainInstance = true
         movieData = arguments?.getParcelable(MOVIE_ITEM_KEY) ?: MovieEntity()
     }
 
@@ -57,12 +59,19 @@ class FragmentMoviesDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navBack = view.findViewById(R.id.home)
         navBack.setOnClickListener {
-            parentFragmentManager.popBackStack(FragmentsTags.MOVIE_LIST_TAG.toString(),POP_BACK_STACK_INCLUSIVE)
+            parentFragmentManager.popBackStack(
+                FragmentsTags.MOVIE_LIST_TAG.toString(),
+                POP_BACK_STACK_INCLUSIVE
+            )
         }
         toolBarImage = view.findViewById(R.id.app_bar_image)
+        Glide.with(view.context).load(movieData.backdropIMG).centerCrop()
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(toolBarImage)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.detailRecycleView)
         recyclerView.layoutManager = LinearLayoutManager(application)
-        val adapter = ListMassiveAdapter( null, application, DataKeys.DETAILS_TYPE)
+        val adapter = ListMassiveAdapter(null, application, DataKeys.DETAILS_TYPE)
         movieData.let {
             adapter.submitList(listOf(it))
         }

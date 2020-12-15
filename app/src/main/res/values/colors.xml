@@ -17,6 +17,6 @@
     <color name="movie_main_item_card_stroke_color">#404056</color>
     <color name="end_of_shape">#08191926</color>
     <color name="start_of_shape">#191926</color>
-    <color name="center_of_shape">#00191926</color>
+    <color name="center_of_shape">#32191926</color>
 
 </resources>

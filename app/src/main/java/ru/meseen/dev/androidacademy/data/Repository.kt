@@ -19,7 +19,6 @@ class Repository(application: Application, private val movieDao: MovieDao) {
     @WorkerThread
     suspend fun updateAll(vararg movieEntity: MovieEntity) = movieDao.updateAll(*movieEntity)
 
-
     @WorkerThread
     suspend fun insert(movieEntity: MovieEntity) = movieDao.insert(movieEntity)
 
@@ -34,5 +33,9 @@ class Repository(application: Application, private val movieDao: MovieDao) {
      */
     @WorkerThread
     suspend fun deleteAll() = movieDao.deleteAll()
+
+
+    //TODO По сути загрузка данных должна происхотить тут, но в данном случае как мне кажется оптимальней сделать загрузку данных при создании BD
+
 
 }

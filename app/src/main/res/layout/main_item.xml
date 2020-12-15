@@ -49,7 +49,6 @@
 
 
             <View
-                android:id="@+id/movie_shape"
                 android:layout_width="166dp"
                 android:layout_height="248dp"
                 android:background="@drawable/shape"
