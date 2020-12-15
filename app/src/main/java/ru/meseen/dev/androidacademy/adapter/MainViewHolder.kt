@@ -42,7 +42,7 @@ class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         movieLengthText.text = temp
 
         Glide.with(application).load(itemMovieData.posterIMG)
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).centerCrop()
             .into(object : CustomViewTarget<ImageView, Drawable>(imageView) {
                 override fun onResourceReady(
                     resource: Drawable,

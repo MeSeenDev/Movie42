@@ -68,7 +68,10 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
         recyclerView.adapter = adapter
         val gridLayoutManager: RecyclerView.LayoutManager
         val quantity =
-            (resources.displayMetrics.widthPixels / resources.getDimension(R.dimen.card_maxWidth)).toInt()
+            (resources.displayMetrics.widthPixels /
+                    (resources.getDimension(R.dimen.main_image_view_item_width) + resources.getDimension(
+                        R.dimen.main_item_margins
+                    )).toInt())
         gridLayoutManager = GridLayoutManager(application.baseContext, quantity)
         gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
         recyclerView.layoutManager = gridLayoutManager
