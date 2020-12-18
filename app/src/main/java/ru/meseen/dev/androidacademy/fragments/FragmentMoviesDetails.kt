@@ -65,7 +65,7 @@ class FragmentMoviesDetails : Fragment() {
             )
         }
         toolBarImage = view.findViewById(R.id.app_bar_image)
-        Glide.with(view.context).load(movieData.backdropIMG).centerCrop()
+        Glide.with(view.context).load(movieData.backdropIMG).centerCrop().error(R.drawable.no_photo)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(toolBarImage)
 
