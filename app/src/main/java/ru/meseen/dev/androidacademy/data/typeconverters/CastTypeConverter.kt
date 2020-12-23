@@ -2,7 +2,7 @@ package ru.meseen.dev.androidacademy.data.typeconverters
 
 import androidx.room.TypeConverter
 import ru.meseen.dev.androidacademy.data.CastData
-import ru.meseen.dev.androidacademy.data.Genre
+import ru.meseen.dev.androidacademy.data.GenreData
 
 class CastTypeConverter {
 
@@ -30,16 +30,16 @@ class CastTypeConverter {
         )
 
     @TypeConverter
-    fun listGenreToString(cast: List<Genre>): String =
+    fun listGenreToString(cast: List<GenreData>): String =
         cast.asSequence().map { "${it.id}↓${it.name}" }.joinToString(separator = "■")
 
     @TypeConverter
-    fun stringGenreToList(value: String): List<Genre> =
+    fun stringGenreToList(value: String): List<GenreData> =
         if (value.isNotEmpty()) value.split("■").asSequence().map {
             val temp = it.split("↓")
-            Genre(
+            GenreData(
                 id = temp[0].toInt(),
                 temp[1]
             )
-        }.toList() else listOf(Genre(name = "..."))
+        }.toList() else listOf(GenreData(name = "..."))
 }

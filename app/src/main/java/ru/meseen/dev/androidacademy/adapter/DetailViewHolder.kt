@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 
 class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -27,10 +27,10 @@ class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemMovieData.labelText
         }
         labelText.text = temp
-        temp = itemMovieData.PgRating.toString() + "+"
+        temp = itemMovieData.pgRating.toString() + "+"
         pgMainText.text = temp
         descriptionText.text = itemMovieData.descriptionText
-        temp = itemMovieData.genres.joinToString { it.name }
+        temp = itemMovieData.genreData.joinToString { it.name }
         keywordsText.text = temp
         temp = "${itemMovieData.reviewsText} REVIEWS"
         reviewsText.text = temp

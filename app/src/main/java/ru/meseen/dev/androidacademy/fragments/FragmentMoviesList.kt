@@ -10,15 +10,15 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ru.meseen.dev.androidacademy.FragmentsTags.MOVIE_DETAILS_TAG
-import ru.meseen.dev.androidacademy.FragmentsTags.MOVIE_LIST_TAG
 import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.adapter.ListMassiveAdapter
-import ru.meseen.dev.androidacademy.data.DataKeys
 import ru.meseen.dev.androidacademy.data.base.App
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 import ru.meseen.dev.androidacademy.data.viewmodel.MovieViewModel
 import ru.meseen.dev.androidacademy.data.viewmodel.MovieViewModelFactory
+import ru.meseen.dev.androidacademy.support.DataKeys
+import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_DETAILS_TAG
+import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_LIST_TAG
 
 class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
 
@@ -72,6 +72,7 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
                     (resources.getDimension(R.dimen.main_image_view_item_width) + resources.getDimension(
                         R.dimen.main_item_margins
                     )).toInt())
+
         gridLayoutManager = GridLayoutManager(application.baseContext, quantity)
         gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
         recyclerView.layoutManager = gridLayoutManager

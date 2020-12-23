@@ -9,8 +9,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.meseen.dev.androidacademy.data.dao.MovieDao
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.dao.MovieDao
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 import ru.meseen.dev.androidacademy.data.loadMovies
 import ru.meseen.dev.androidacademy.data.typeconverters.CastTypeConverter
 

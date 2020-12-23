@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.textview.MaterialTextView
-import ru.meseen.dev.androidacademy.FragmentsTags
 import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.adapter.ListMassiveAdapter
-import ru.meseen.dev.androidacademy.data.DataKeys
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
+import ru.meseen.dev.androidacademy.support.DataKeys
+import ru.meseen.dev.androidacademy.support.FragmentsTags
 
 class FragmentMoviesDetails : Fragment() {
 
@@ -65,8 +65,12 @@ class FragmentMoviesDetails : Fragment() {
             )
         }
         toolBarImage = view.findViewById(R.id.app_bar_image)
-        Glide.with(view.context).load(movieData.backdropIMG).centerCrop().error(R.drawable.no_photo)
+        Glide.with(view.context)
+            .load(movieData.backdropIMG)
+            .centerCrop()
+            .error(R.drawable.no_photo)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .placeholder(R.drawable.loading_card_img)
             .into(toolBarImage)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.detailRecycleView)

@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 import kotlin.math.round
 
 
@@ -45,14 +45,14 @@ private class JsonMovie(
     val adult: Boolean
 )
 
-private suspend fun loadGenres(context: Context): List<Genre> = withContext(Dispatchers.IO) {
+private suspend fun loadGenres(context: Context): List<GenreData> = withContext(Dispatchers.IO) {
     val data = readAssetFileToString(context, "genres.json")
     parseGenres(data)
 }
 
-internal fun parseGenres(data: String): List<Genre> {
+internal fun parseGenres(data: String): List<GenreData> {
     val jsonGenres = jsonFormat.decodeFromString<List<JsonGenre>>(data)
-    return jsonGenres.map { Genre(id = it.id, name = it.name) }.toList()
+    return jsonGenres.map { GenreData(id = it.id, name = it.name) }.toList()
 }
 
 private fun readAssetFileToString(context: Context, fileName: String): String {
@@ -83,10 +83,10 @@ internal suspend fun loadMovies(context: Context): List<MovieEntity> = withConte
 
 internal fun parseMovies(
     data: String,
-    genres: List<Genre>,
+    genreData: List<GenreData>,
     actors: List<CastData>
 ): List<MovieEntity> {
-    val genresMap = genres.associateBy { it.id }
+    val genresMap = genreData.associateBy { it.id }
     val actorsMap = actors.associateBy { it.id }
 
     val jsonMovies = jsonFormat.decodeFromString<List<JsonMovie>>(data)
@@ -95,7 +95,7 @@ internal fun parseMovies(
         @Suppress("unused")
         (MovieEntity(
             _id = jsonMovie.id.toLong(),
-            PgRating = if (jsonMovie.adult) 16 else 13,
+            pgRating = if (jsonMovie.adult) 16 else 13,
             labelText = jsonMovie.title,
             descriptionText = jsonMovie.overview,
             posterIMG = jsonMovie.posterPicture,
@@ -103,7 +103,7 @@ internal fun parseMovies(
             ratings = round(jsonMovie.ratings / 2),
             reviewsText = jsonMovie.votesCount,
             movieLength = jsonMovie.runtime,
-            genres = jsonMovie.genreIds.map {
+            genreData = jsonMovie.genreIds.map {
                 genresMap[it] ?: throw IllegalArgumentException("Genre not found")
             },
             cast = jsonMovie.actors.map {

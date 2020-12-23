@@ -3,7 +3,7 @@ package ru.meseen.dev.androidacademy.data.viewmodel
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import ru.meseen.dev.androidacademy.data.Repository
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 
 class MovieViewModel(private val repository: Repository) : ViewModel() {
     val allWords: LiveData<List<MovieEntity>> = repository.moviesList.asLiveData()

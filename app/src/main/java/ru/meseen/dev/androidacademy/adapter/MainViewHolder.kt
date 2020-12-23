@@ -15,7 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 
 class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -30,19 +30,21 @@ class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
 
     fun bind(itemMovieData: MovieEntity, application: Application) {
-        var temp = "${itemMovieData.PgRating}+"
+        var temp = "${itemMovieData.pgRating}+"
         pgMainText.text = temp
         labelMainText.text = itemMovieData.labelText
         ratingBar.rating = itemMovieData.ratings
         temp = "${itemMovieData.reviewsText} REVIEWS"
         reviewsText.text = temp
-        temp = itemMovieData.genres.joinToString { it.name }
+        temp = itemMovieData.genreData.joinToString { it.name }
         keywordsText.text = temp
         temp = "${itemMovieData.movieLength}MIN"
         movieLengthText.text = temp
 
         Glide.with(application).load(itemMovieData.posterIMG)
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).centerCrop()
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .centerCrop()
+            .placeholder(R.drawable.loading_card_img)
             .into(object : CustomViewTarget<ImageView, Drawable>(imageView) {
                 override fun onResourceReady(
                     resource: Drawable,
@@ -57,6 +59,7 @@ class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 }
 
                 override fun onResourceCleared(placeholder: Drawable?) {
+                    imageView.background = placeholder
                 }
             })
 

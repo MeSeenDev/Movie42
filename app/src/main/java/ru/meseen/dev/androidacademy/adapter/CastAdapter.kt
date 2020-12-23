@@ -64,6 +64,7 @@ class CastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(item.drawableUrl)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
+            .placeholder(R.drawable.loading_card_img)
             .error(R.drawable.no_photo)
             .into(castView)
 

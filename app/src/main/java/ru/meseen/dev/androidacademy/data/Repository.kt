@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
 import ru.meseen.dev.androidacademy.data.base.App
-import ru.meseen.dev.androidacademy.data.dao.MovieDao
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.dao.MovieDao
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 
 class Repository(application: Application, private val movieDao: MovieDao) {
 

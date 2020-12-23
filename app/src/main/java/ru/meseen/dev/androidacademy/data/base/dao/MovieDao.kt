@@ -1,8 +1,8 @@
-package ru.meseen.dev.androidacademy.data.dao
+package ru.meseen.dev.androidacademy.data.base.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 
 @Dao
 interface MovieDao {
