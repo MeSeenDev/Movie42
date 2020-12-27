@@ -30,17 +30,17 @@ import ru.meseen.dev.androidacademy.data.base.RoomDataBase.Companion.TABLE_NAME
 data class MovieEntity(
     @PrimaryKey(autoGenerate = true)
     val _id: Long = 0,
-    val pgRating: Int = 0/* Минимальный допустимый возраст */,
-    val labelText: String = "No data" /* Имя фильма Title */,
-    val genreData: List<GenreData> = listOf(GenreData()) /* Жанры фильма */,
+    val pgRating: Int = 0,
+    val labelText: String = "No data",
+    val genreData: List<GenreData> = listOf(GenreData()),
     val posterIMG: String = "https://image.tmdb.org/t/p/w342/riYInlsq2kf1AWoGm80JQW5dLKp.jpg",
     val backdropIMG: String = "https://image.tmdb.org/t/p/w342/mc48QVtMhohMFrHGca8OHTB6C2B.jpg",
-    val ratings: Float = 0f /* Рейтинг фильма от 0..10 vote_average */,
-    val reviewsText: Int = 101 /* overview количество проголосовавших votesCount */,
-    val descriptionText: String = " no description"/* Описание, Дескрипшен фильма overview */,
-    val movieLength: Int = 60 /* Длительность фильма runtime */,
+    val ratings: Float = 0f,
+    val reviewsText: Int = 101,
+    val descriptionText: String = " no description",
+    val movieLength: Int = 60,
     var isFavorite: Boolean = false,
-    val cast: List<CastData> = listOf(CastData()) /* Список Актеров каста actors */
+    val cast: List<CastData> = listOf(CastData())
 ) : Parcelable {
 
     //то что ходит как собака, ведет себя как собака и лает как собака является собакой

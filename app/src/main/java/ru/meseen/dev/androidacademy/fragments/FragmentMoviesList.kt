@@ -77,7 +77,6 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
         gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
         recyclerView.layoutManager = gridLayoutManager
 
-
     }
 
     override fun onClick(item: MovieEntity) {
