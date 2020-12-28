@@ -68,6 +68,7 @@
         <item name="android:textColor">@color/colorAccent</item>
         <item name="background">@android:color/transparent</item>
         <item name="android:gravity">start</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:lines">1</item>
     </style>
 
@@ -77,6 +78,7 @@
         <item name="android:textSize">@dimen/movie_main_item_reviewstext_size</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:gravity">start</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:lines">1</item>
         <item name="textAllCaps">true</item>
     </style>
@@ -86,6 +88,7 @@
         <item name="android:textSize">@dimen/movie_main_item_labelmaintext_size</item>
         <item name="android:textColor">@color/label_text</item>
         <item name="android:gravity">start</item>
+        <item name="android:ellipsize">end</item>
         <item name="background">@android:color/transparent</item>
         <item name="android:lines">1</item>
     </style>
@@ -116,7 +119,8 @@
         <item name="android:textSize">40sp</item>
         <item name="android:textColor">@color/label_text</item>
         <item name="android:gravity">start</item>
-        <item name="android:lines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
     </style>
 
     <style name="MovieItem.Keywords" parent="Theme.Movie42.MovieItems">
@@ -124,6 +128,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:gravity">start</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:lines">1</item>
     </style>
 
@@ -139,6 +144,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:gravity">start</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:lines">1</item>
         <item name="textAllCaps">true</item>
     </style>
@@ -148,6 +154,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/label_text</item>
         <item name="android:gravity">start</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:lines">1</item>
     </style>
 

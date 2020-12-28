@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.data.DataKeys
 import ru.meseen.dev.androidacademy.data.base.App
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
+import ru.meseen.dev.androidacademy.support.DataKeys
 
 class ListMassiveAdapter(
     private val listener: RecycleClickListener?,

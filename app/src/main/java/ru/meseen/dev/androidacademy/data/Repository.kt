@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
 import ru.meseen.dev.androidacademy.data.base.App
-import ru.meseen.dev.androidacademy.data.dao.MovieDao
-import ru.meseen.dev.androidacademy.data.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.dao.MovieDao
+import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 
 class Repository(application: Application, private val movieDao: MovieDao) {
 
@@ -18,7 +18,6 @@ class Repository(application: Application, private val movieDao: MovieDao) {
 
     @WorkerThread
     suspend fun updateAll(vararg movieEntity: MovieEntity) = movieDao.updateAll(*movieEntity)
-
 
     @WorkerThread
     suspend fun insert(movieEntity: MovieEntity) = movieDao.insert(movieEntity)
@@ -34,5 +33,9 @@ class Repository(application: Application, private val movieDao: MovieDao) {
      */
     @WorkerThread
     suspend fun deleteAll() = movieDao.deleteAll()
+
+
+    //TODO По сути загрузка данных должна происхотить тут, но в данном случае как мне кажется оптимальней сделать загрузку данных при создании BD
+
 
 }

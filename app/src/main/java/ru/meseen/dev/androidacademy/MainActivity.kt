@@ -3,6 +3,7 @@ package ru.meseen.dev.androidacademy
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.meseen.dev.androidacademy.fragments.FragmentMoviesList
+import ru.meseen.dev.androidacademy.support.FragmentsTags
 
 class MainActivity : AppCompatActivity() {
 

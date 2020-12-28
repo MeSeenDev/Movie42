@@ -3,7 +3,6 @@
 
     <dimen name="app_bar_height">280dp</dimen>
     <dimen name="card_maxWidth">170dp</dimen>
-    <dimen name="card_maxHeight">296dp</dimen>
     <dimen name="cast_image_width">80dp</dimen>
     <dimen name="cast_image_height">80dp</dimen>
     <dimen name="movie_details_nested_overlap_top">78dp</dimen>
@@ -28,7 +27,11 @@
     <dimen name="movie_main_item_pgmaintext_favimageview_margin_top">12dp</dimen>
     <dimen name="movie_main_item_keywordtext_margin_bottom">8dp</dimen>
     <dimen name="movie_main_item_ratingbar_margin_bottom">2dp</dimen>
-
+    <dimen name="main_image_view_item_width">166dp</dimen>
+    <dimen name="main_image_view_item_height">248dp</dimen>
+    <dimen name="main_item_margins">8dp</dimen>
+    <dimen name="main_item_recycle_view_padding_start">8dp</dimen>
+    <dimen name="main_item_recycle_view_padding_end">8dp</dimen>
 
 
 </resources>
