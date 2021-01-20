@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_top_rated"
+        android:enabled="true"
+        android:icon="@drawable/ic_vertical_top"
+        android:title="@string/nav_top_rated"/>
+    <item
+        android:id="@+id/nav_now_playing"
+        android:enabled="true"
+        android:icon="@drawable/ic_now_playing"
+        android:title="@string/nav_now_playing"/>
+    <item
+        android:id="@+id/nav_favorite"
+        android:enabled="true"
+        android:visible="true"
+        android:icon="@drawable/ic_baseline_favorite_false"
+        android:title="@string/nav_favorites"/>
+    <item
+        android:id="@+id/nav_popular"
+        android:enabled="true"
+        android:icon="@drawable/ic_popular_star"
+        android:title="@string/nav_popular"/>
+    <item
+        android:id="@+id/nav_upcoming"
+        android:enabled="true"
+        android:icon="@drawable/ic_film_upcoming"
+        android:title="@string/nav_up_coming"/>
+</menu>

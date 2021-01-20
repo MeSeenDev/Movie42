@@ -8,15 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.textview.MaterialTextView
 import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.adapter.ListMassiveAdapter
-import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
-import ru.meseen.dev.androidacademy.support.DataKeys
+import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieDetailsViewModel
+import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModelFactory
 import ru.meseen.dev.androidacademy.support.FragmentsTags
 
 class FragmentMoviesDetails : Fragment() {
@@ -25,14 +23,17 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var toolBarImage: ImageView
 
     private lateinit var application: Application
-    private lateinit var movieData: MovieEntity
+
+    private val viewModel by activityViewModels<MovieDetailsViewModel> {
+        MovieViewModelFactory(owner = this, application, null)
+    }
 
     companion object {
         private const val MOVIE_ITEM_KEY = "MOVIE_ITEM_KEY"
-        fun getInstance(application: Application, movieData: MovieEntity): Fragment {
+        fun getInstance(application: Application, movieID: Long): Fragment {
             val instance = FragmentMoviesDetails()
             val bundle = Bundle()
-            bundle.putParcelable(MOVIE_ITEM_KEY, movieData)
+            bundle.putLong(MOVIE_ITEM_KEY, movieID)
             instance.arguments = bundle
             instance.application = application
             return instance
@@ -43,7 +44,7 @@ class FragmentMoviesDetails : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        movieData = arguments?.getParcelable(MOVIE_ITEM_KEY) ?: MovieEntity()
+
     }
 
     override fun onCreateView(
@@ -65,21 +66,16 @@ class FragmentMoviesDetails : Fragment() {
             )
         }
         toolBarImage = view.findViewById(R.id.app_bar_image)
-        Glide.with(view.context)
-            .load(movieData.backdropIMG)
-            .centerCrop()
-            .error(R.drawable.no_photo)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.loading_card_img)
-            .into(toolBarImage)
+        /* Glide.with(view.context)
+             .load(movieData.backdropIMG)
+             .centerCrop()
+             .error(R.drawable.no_photo)
+             .diskCacheStrategy(DiskCacheStrategy.ALL)
+             .placeholder(R.drawable.loading_card_img)
+             .into(toolBarImage)*/
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.detailRecycleView)
         recyclerView.layoutManager = LinearLayoutManager(application)
-        val adapter = ListMassiveAdapter(null, application, DataKeys.DETAILS_TYPE)
-        movieData.let {
-            adapter.submitList(listOf(it))
-        }
-        recyclerView.adapter = adapter
 
     }
 

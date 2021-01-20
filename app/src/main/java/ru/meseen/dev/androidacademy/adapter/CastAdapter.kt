@@ -1,23 +1,8 @@
 package ru.meseen.dev.androidacademy.adapter
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.android.material.snackbar.Snackbar
-import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.data.CastData
-
-class CastAdapter :
+class CastAdapter {}/*:
     ListAdapter<CastData, RecyclerView.ViewHolder>(MOVIE_DETAIL_COMPARATOR) {
+
 
     companion object {
         private val MOVIE_DETAIL_COMPARATOR = object : DiffUtil.ItemCallback<CastData>() {
@@ -70,4 +55,6 @@ class CastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
+
 }
+*/

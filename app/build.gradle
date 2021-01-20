@@ -2,12 +2,12 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-parcelize'
     id "org.jetbrains.kotlin.plugin.serialization"
 }
 
 android {
     compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "ru.meseen.dev.androidacademy"
@@ -25,18 +25,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions {
-        exclude 'META-INF/atomicfu.kotlin_module'
-    }
+
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
-    buildToolsVersion '30.0.2'
 
 }
 
@@ -44,13 +42,18 @@ dependencies {
 
     // "Сторонние" библиотеки
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
 
+
+
     // Room Компоненты
-    kapt "androidx.room:room-compiler:2.3.0-alpha04"
+    kapt "androidx.room:room-compiler:2.3.0-beta01"
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
-    implementation "androidx.room:room-runtime:2.3.0-alpha04"
+    implementation "androidx.room:room-runtime:2.3.0-beta01"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
     // Lifecycle Компоненты
@@ -66,14 +69,19 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJson"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // UI Компоненты
     implementation project(':ratingbarsvg')
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation "com.google.android.material:material:$rootProject.materialVersion"
 
     // Testing

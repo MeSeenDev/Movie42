@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/movie_main_item_parent_margin_bottom"
+    android:layout_marginStart="@dimen/movie_main_item_parent_margin_start"
+    android:layout_marginEnd="@dimen/movie_main_item_parent_margin_end"
     tools:ignore="SmallSp">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/MainItem.MaterialCardView"
         tools:ignore="HardcodedText">
@@ -35,20 +37,20 @@
 
 
             <ImageView
-                android:id="@+id/imageMainItemView"
-                android:layout_width="@dimen/main_image_view_item_width"
+                android:id="@+id/posterImage"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/main_image_view_item_height"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@id/labelMainText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/main_movie"
+                tools:srcCompat="@drawable/main_movie"
                 tools:ignore="ContentDescription" />
 
 
             <View
-                android:layout_width="@dimen/main_image_view_item_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/main_image_view_item_height"
                 android:background="@drawable/shape"
                 android:contentDescription="Movie Poster"
@@ -58,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/keywordsText"
+                android:id="@+id/genresKeywordsText"
                 style="@style/MainItem.Keywords"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -80,10 +82,10 @@
                 android:numStars="5"
                 android:rating="10"
                 android:stepSize="1"
-                app:layout_constraintBottom_toBottomOf="@+id/imageMainItemView"
+                app:layout_constraintBottom_toBottomOf="@+id/posterImage"
                 app:layout_constraintEnd_toStartOf="@id/reviewsText"
                 app:layout_constraintStart_toEndOf="@+id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/keywordsText" />
+                app:layout_constraintTop_toBottomOf="@id/genresKeywordsText" />
 
 
             <TextView
@@ -106,10 +108,10 @@
                 android:text="@string/lorem_label"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@+id/imageMainItemView" />
+                app:layout_constraintTop_toBottomOf="@+id/posterImage" />
 
             <TextView
-                android:id="@+id/movieLengthText"
+                android:id="@+id/runtimeText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"

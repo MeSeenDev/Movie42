@@ -4,37 +4,42 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import ru.meseen.dev.androidacademy.data.base.dao.MovieDao
-import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
-import ru.meseen.dev.androidacademy.data.loadMovies
-import ru.meseen.dev.androidacademy.data.typeconverters.CastTypeConverter
+import ru.meseen.dev.androidacademy.data.base.dao.MovieListableDao
+import ru.meseen.dev.androidacademy.data.base.dao.PageKeysDao
+import ru.meseen.dev.androidacademy.data.base.entity.*
 
-@Database(entities = [MovieEntity::class], version = 1, exportSchema = false)
-@TypeConverters(CastTypeConverter::class)
+@Database(
+    entities = [MovieDataEntity::class, CastEntity::class, GenresEntity::class, PageKeyEntity::class, MovieAdditionalDataEntity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class RoomDataBase : RoomDatabase() {
 
-    abstract fun movieDao(): MovieDao
+    abstract fun movieDao(): MovieListableDao
+    abstract fun pageKeyDao(): PageKeysDao
 
     companion object {
-        const val TABLE_NAME = "movie_table"
+        private const val DATA_BASE_NAME = "MOVIE_DATA_BASE"
+        const val TABLE_NAME = "MOVIE_TABLE"
+        const val CAST_TABLE_NAME = "CAST_TABLE"
+        const val GENRES_TABLE_NAME = "GENRES_TABLE"
+        const val PAGE_TABLE_NAME = "PAGE_TABLE_NAME"
+        const val MOVIE_ADDITIONAL_TABLE_NAME = "MOVIE_ADDITIONAL_TABLE_NAME"
+
 
         @Volatile
         private var INSTANCE: RoomDataBase? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope): RoomDataBase {
+        fun getDatabase(applicationContext: Context, scope: CoroutineScope): RoomDataBase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    applicationContext.applicationContext,
                     RoomDataBase::class.java,
-                    TABLE_NAME
+                    DATA_BASE_NAME
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(MovieDatabaseCallback(context, scope))
+                    .addCallback(MovieDatabaseCallback(applicationContext, scope))
                     .build()
                 INSTANCE = instance
                 instance
@@ -47,20 +52,14 @@ abstract class RoomDataBase : RoomDatabase() {
         private val context: Context,
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
+        // Пока ничего
 
-
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            INSTANCE?.let { database ->
-                scope.launch(Dispatchers.IO) {
-                    populateDatabase(database.movieDao(), loadMovies(context))
-                }
-            }
-        }
-
-        suspend fun populateDatabase(movieDao: MovieDao, fakeInternetData: List<MovieEntity>) {
-            movieDao.deleteAll()
-            fakeInternetData.asSequence().forEach { movieDao.insert(it) }
+        suspend fun populateDatabase(
+            movieListableDao: MovieListableDao,
+            fakeInternetData: List<MovieDataEntity>
+        ) {
+            movieListableDao.deleteAll()
+            fakeInternetData.asSequence().forEach { movieListableDao.insert(it) }
 
 
         }

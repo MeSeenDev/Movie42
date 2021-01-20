@@ -1,4 +1,6 @@
-package ru.meseen.dev.androidacademy.adapter
+@file:Suppress("unused", "unused", "unused", "unused", "unused", "unused", "unused")
+
+package ru.meseen.dev.androidacademy.adapter.vh
 
 import android.app.Application
 import android.graphics.drawable.Drawable
@@ -15,51 +17,59 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieDataEntity
+import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient.getImageUrl
+import kotlin.math.round
 
-class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    var goupView: ConstraintLayout = itemView.findViewById(R.id.mainItemGroup)
-    var imageView: ImageView = itemView.findViewById(R.id.imageMainItemView)
-    private var keywordsText: TextView = itemView.findViewById(R.id.keywordsText)
+class MovieItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var groupView: ConstraintLayout = itemView.findViewById(R.id.mainItemGroup)
+    var posterImage: ImageView = itemView.findViewById(R.id.posterImage)
+    private var genres: TextView = itemView.findViewById(R.id.genresKeywordsText)
     var favImageView: ImageView = itemView.findViewById(R.id.favImageView)
     private var reviewsText: TextView = itemView.findViewById(R.id.reviewsText)
     private var labelMainText: TextView = itemView.findViewById(R.id.labelMainText)
-    private var movieLengthText: TextView = itemView.findViewById(R.id.movieLengthText)
+    private var runtime: TextView = itemView.findViewById(R.id.runtimeText)
     private var pgMainText: TextView = itemView.findViewById(R.id.pgMainText)
     private var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
 
-    fun bind(itemMovieData: MovieEntity, application: Application) {
-        var temp = "${itemMovieData.pgRating}+"
-        pgMainText.text = temp
-        labelMainText.text = itemMovieData.labelText
-        ratingBar.rating = itemMovieData.ratings
-        temp = "${itemMovieData.reviewsText} REVIEWS"
-        reviewsText.text = temp
-        temp = itemMovieData.genreData.joinToString { it.name }
-        keywordsText.text = temp
-        temp = "${itemMovieData.movieLength}MIN"
-        movieLengthText.text = temp
+    fun bind(itemMovieData: MovieDataEntity, application: Application) {
 
-        Glide.with(application).load(itemMovieData.posterIMG)
+        var temp = itemMovieData.genreIds
+        genres.text = temp
+        temp = "${itemMovieData.voteCount} REVIEWS"
+        reviewsText.text = temp
+        temp = "99MIN"
+        runtime.visibility = View.INVISIBLE
+        pgMainText.text = if (itemMovieData.adult) "+16" else "+12"
+        labelMainText.text = itemMovieData.title
+        ratingBar.rating = round(itemMovieData.voteAverage.toFloat() / 2)
+
+        loadImage(itemMovieData, application)
+
+
+    }
+
+    private fun loadImage(itemMovieData: MovieDataEntity, application: Application) {
+        Glide.with(application)
+            .load(getImageUrl(itemMovieData.posterPath))
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .centerCrop()
             .placeholder(R.drawable.loading_card_img)
-            .into(object : CustomViewTarget<ImageView, Drawable>(imageView) {
+            .into(object : CustomViewTarget<ImageView, Drawable>(posterImage) {
                 override fun onResourceReady(
                     resource: Drawable,
                     transition: Transition<in Drawable>?
                 ) {
-                    imageView.background = resource
+                    posterImage.background = resource
                 }
 
                 override fun onLoadFailed(errorDrawable: Drawable?) {
-                    imageView.background =
+                    posterImage.background =
                         ContextCompat.getDrawable(application, R.drawable.no_photo)
                 }
 
                 override fun onResourceCleared(placeholder: Drawable?) {
-                    imageView.background = placeholder
+                    posterImage.background = placeholder
                 }
             })
 
@@ -73,10 +83,6 @@ class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         )
         gradientDrawable.setGradientCenter(0.6f, 0.5f)
         gradientDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
-
-        imageView.setImageDrawable(gradientDrawable)
-        favImageView.setImageResource(if (itemMovieData.isFavorite) R.drawable.ic_baseline_favorite_true else R.drawable.ic_baseline_favorite_false)
-
     }
 
 }

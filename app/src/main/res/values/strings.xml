@@ -13,5 +13,11 @@
     <string name="lorem_movielengthtext">137MIN</string>
     <string name="lorem_pdmaintext">+13</string>
     <string name="lorem_keywordstext">Action, Adventure, Fantasy</string>
+    <string name="nav_top_rated">Top Rated</string>
+    <string name="nav_now_playing">Now Playing</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_popular">Popular</string>
+    <string name="nav_up_coming">Up Coming</string>
+    <string name="toolbar_search">Search</string>
 
 </resources>
