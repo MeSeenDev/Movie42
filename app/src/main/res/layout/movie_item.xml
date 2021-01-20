@@ -60,7 +60,7 @@
         app:layout_constraintGuide_begin="115dp" />
 
     <TextView
-        android:id="@+id/keywordsText"
+        android:id="@+id/genresKeywordsText"
         style="@style/MovieItem.Keywords"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
         app:layout_constraintBottom_toTopOf="@id/storyLineHeadText"
         app:layout_constraintEnd_toStartOf="@id/reviewsText"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/keywordsText" />
+        app:layout_constraintTop_toBottomOf="@+id/genresKeywordsText" />
 
     <TextView
         android:id="@+id/reviewsText"

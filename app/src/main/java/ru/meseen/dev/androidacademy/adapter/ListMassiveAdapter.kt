@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import ru.meseen.dev.androidacademy.R
+import ru.meseen.dev.androidacademy.adapter.vh.DetailViewHolder
+import ru.meseen.dev.androidacademy.adapter.vh.MainViewHolder
 import ru.meseen.dev.androidacademy.data.base.App
 import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 import ru.meseen.dev.androidacademy.support.DataKeys

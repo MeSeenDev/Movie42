@@ -9,20 +9,19 @@
     tools:ignore="Overdraw">
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/movies_list_toolbar"
-        style="@style/MainToolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@id/recycleMain"
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:navigationIcon="@drawable/ic_combined_shape"
-        app:title="Movies list" />
+        android:layout_height="0dp">
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleMain"
@@ -34,14 +33,11 @@
         android:paddingStart="@dimen/main_item_recycle_view_padding_start"
         android:paddingEnd="@dimen/main_item_recycle_view_padding_end"
         android:clipToPadding="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movies_list_toolbar"
+
         tools:itemCount="4"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/main_item"
         tools:spanCount="2" />
-
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

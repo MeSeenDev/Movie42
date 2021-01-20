@@ -20,7 +20,7 @@ import ru.meseen.dev.androidacademy.data.base.RoomDataBase.Companion.TABLE_NAME
  *@param posterIMG: Адрес изображеиня постера
  *@param backdropIMG: Адрес изображения на фоне дестрипшн фрагмента
  *@param ratings: Рейтинг фильма от 0..10 "vote_average"
- *@param reviewsText: overview количество проголосовавших "votesCount"
+ *@param reviewsText: overview количество проголосовавших "votesCount"(vote_count)
  *@param descriptionText: Описание, Дескрипшен фильма "overview"
  *@param movieLength: Длительность фильма "runtime"
  *@param isFavorite: Добавлен ли в избранное

@@ -1,4 +1,4 @@
-package ru.meseen.dev.androidacademy.adapter
+package ru.meseen.dev.androidacademy.adapter.vh
 
 import android.app.Application
 import android.graphics.drawable.Drawable
@@ -20,12 +20,12 @@ import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
 class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var goupView: ConstraintLayout = itemView.findViewById(R.id.mainItemGroup)
-    var imageView: ImageView = itemView.findViewById(R.id.imageMainItemView)
-    private var keywordsText: TextView = itemView.findViewById(R.id.keywordsText)
+    var imageView: ImageView = itemView.findViewById(R.id.posterImage)
+    private var keywordsText: TextView = itemView.findViewById(R.id.genresKeywordsText)
     var favImageView: ImageView = itemView.findViewById(R.id.favImageView)
     private var reviewsText: TextView = itemView.findViewById(R.id.reviewsText)
     private var labelMainText: TextView = itemView.findViewById(R.id.labelMainText)
-    private var movieLengthText: TextView = itemView.findViewById(R.id.movieLengthText)
+    private var movieLengthText: TextView = itemView.findViewById(R.id.runtimeText)
     private var pgMainText: TextView = itemView.findViewById(R.id.pgMainText)
     private var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
 

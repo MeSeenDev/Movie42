@@ -35,7 +35,7 @@
 
 
             <ImageView
-                android:id="@+id/imageMainItemView"
+                android:id="@+id/posterImage"
                 android:layout_width="@dimen/main_image_view_item_width"
                 android:layout_height="@dimen/main_image_view_item_height"
                 android:scaleType="centerCrop"
@@ -43,7 +43,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/main_movie"
+                tools:srcCompat="@drawable/main_movie"
                 tools:ignore="ContentDescription" />
 
 
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/keywordsText"
+                android:id="@+id/genresKeywordsText"
                 style="@style/MainItem.Keywords"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -80,10 +80,10 @@
                 android:numStars="5"
                 android:rating="10"
                 android:stepSize="1"
-                app:layout_constraintBottom_toBottomOf="@+id/imageMainItemView"
+                app:layout_constraintBottom_toBottomOf="@+id/posterImage"
                 app:layout_constraintEnd_toStartOf="@id/reviewsText"
                 app:layout_constraintStart_toEndOf="@+id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/keywordsText" />
+                app:layout_constraintTop_toBottomOf="@id/genresKeywordsText" />
 
 
             <TextView
@@ -106,10 +106,10 @@
                 android:text="@string/lorem_label"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@+id/imageMainItemView" />
+                app:layout_constraintTop_toBottomOf="@+id/posterImage" />
 
             <TextView
-                android:id="@+id/movieLengthText"
+                android:id="@+id/runtimeText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"

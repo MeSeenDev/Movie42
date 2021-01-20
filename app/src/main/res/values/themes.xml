@@ -13,13 +13,25 @@
         <item name="colorSecondary">@color/colorAccent</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+        <item name="toolbarStyle">@style/MainToolbar</item>
     </style>
+    <!-- Customize your theme here. -->
 
 
-    <style name="MainToolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+    <style name="MainToolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+
+
         <item name="android:background">@color/background</item>
         <item name="titleTextColor">@color/white</item>
+        <item name="searchViewStyle">@style/MainToolbar.SearchView</item>
+        <item name="android:searchViewStyle">@style/MainToolbar.SearchView</item>
+    </style>
+
+    <style name="MainToolbar.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="editTextColor">@color/base_text</item>
+        <item name="android:editTextColor">@color/base_text</item>
+
     </style>
 
 

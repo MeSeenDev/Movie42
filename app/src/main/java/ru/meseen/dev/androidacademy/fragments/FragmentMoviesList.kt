@@ -1,6 +1,7 @@
 package ru.meseen.dev.androidacademy.fragments
 
 import android.app.Application
+import android.os.BadParcelableException
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,15 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.adapter.ListMassiveAdapter
+import ru.meseen.dev.androidacademy.adapter.MoviesRecycleAdapter
+import ru.meseen.dev.androidacademy.data.Repository
 import ru.meseen.dev.androidacademy.data.base.App
 import ru.meseen.dev.androidacademy.data.base.entity.MovieEntity
-import ru.meseen.dev.androidacademy.data.viewmodel.MovieViewModel
-import ru.meseen.dev.androidacademy.data.viewmodel.MovieViewModelFactory
-import ru.meseen.dev.androidacademy.support.DataKeys
+import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModel
+import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModelFactory
 import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_DETAILS_TAG
 import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_LIST_TAG
 
@@ -27,12 +30,18 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
     }
 
     private lateinit var application: Application
+    private var listType: Repository.ListType = Repository.ListType.TOP_VIEW_LIST
 
     companion object {
+        private const val LIST_TYPE = "LIST_TYPEs"
         fun getInstance(
-            application: Application
+            application: Application,
+            listType: Repository.ListType
         ): Fragment {
             val instance = FragmentMoviesList()
+            val bundle = Bundle()
+            bundle.putSerializable(LIST_TYPE, listType)
+            instance.arguments = bundle
             instance.application = application
             return instance
         }
@@ -42,7 +51,7 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
+        listType = arguments?.getSerializable(LIST_TYPE) as Repository.ListType
     }
 
 
@@ -59,13 +68,8 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycleMain)
         recyclerView.setHasFixedSize(true)
-        val adapter = ListMassiveAdapter(this, application, DataKeys.MAIN_TYPE)
-        movieViewModel.allWords.observe(viewLifecycleOwner, {
-            it.let {
-                adapter.submitList(it)
-            }
-        })
-        recyclerView.adapter = adapter
+        val adapter = MoviesRecycleAdapter(application)
+        val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         val gridLayoutManager: RecyclerView.LayoutManager
         val quantity =
             (resources.displayMetrics.widthPixels /
@@ -73,11 +77,20 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
                         R.dimen.main_item_margins
                     )).toInt())
 
+        movieViewModel.getMoviesList(listType).observe(viewLifecycleOwner, {
+            it.let { adapter.submitList(it) }
+        })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            movieViewModel.updateListData(listType)
+            swipeRefreshLayout.isRefreshing = false
+
+        }
+        recyclerView.adapter = adapter
         gridLayoutManager = GridLayoutManager(application.baseContext, quantity)
         gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
+        gridLayoutManager.scrollToPosition(10)
         recyclerView.layoutManager = gridLayoutManager
-
-
     }
 
     override fun onClick(item: MovieEntity) {
@@ -92,3 +105,4 @@ class FragmentMoviesList : Fragment(), ListMassiveAdapter.RecycleClickListener {
     }
 
 }
+

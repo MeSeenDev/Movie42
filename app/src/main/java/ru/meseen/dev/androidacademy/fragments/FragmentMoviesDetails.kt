@@ -80,7 +80,6 @@ class FragmentMoviesDetails : Fragment() {
             adapter.submitList(listOf(it))
         }
         recyclerView.adapter = adapter
-
     }
 
 }
