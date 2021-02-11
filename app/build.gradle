@@ -68,6 +68,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"
+    //noinspection GradleDependency
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
 
@@ -79,7 +80,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // UI Компоненты
-    implementation project(':ratingbarsvg')
+
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation "com.google.android.material:material:$rootProject.materialVersion"

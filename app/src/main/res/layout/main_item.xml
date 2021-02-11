@@ -72,15 +72,14 @@
                 app:layout_constraintTop_toBottomOf="@id/guideline_center"
                 tools:ignore="HardcodedText,SmallSp" />
 
-            <com.grdk.ratingbarsvg.RatingBarSvg
+            <RatingBar
                 android:id="@+id/ratingBar"
                 style="@style/MainItem.RatingBar"
+                android:theme="@style/RatingBarColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:progressDrawable="@drawable/ratingbar_svg_selector_8"
-                android:layout_marginBottom="@dimen/movie_main_item_ratingbar_margin_bottom"
                 android:numStars="5"
-                android:rating="10"
+                android:rating="4"
                 android:stepSize="1"
                 app:layout_constraintBottom_toBottomOf="@+id/posterImage"
                 app:layout_constraintEnd_toStartOf="@id/reviewsText"

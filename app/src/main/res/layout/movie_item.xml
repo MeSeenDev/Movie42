@@ -71,14 +71,14 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/labelText" />
 
-    <com.grdk.ratingbarsvg.RatingBarSvg
+    <RatingBar
         android:id="@+id/ratingBar"
         style="@style/MovieItem.RatingBar"
+        android:theme="@style/RatingBarColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:numStars="5"
-        android:progressDrawable="@drawable/ratingbar_svg_selector_12"
         android:rating="4"
         android:stepSize="1"
         app:layout_constraintBottom_toTopOf="@id/storyLineHeadText"

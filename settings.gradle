@@ -1,2 +1,2 @@
-include ':app' , ':ratingbarsvg'
+include ':app'
 rootProject.name = "AndroidAcademy"
