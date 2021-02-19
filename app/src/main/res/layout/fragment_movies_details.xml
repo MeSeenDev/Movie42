@@ -8,6 +8,7 @@
     tools:ignore="Overdraw">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/parentDetails"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
@@ -15,8 +16,11 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detailsBottomSheet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:behavior_hideable="true"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             android:background="@android:color/transparent">
 
             <androidx.constraintlayout.widget.Guideline
@@ -34,6 +38,7 @@
                 app:layout_constraintGuide_begin="@dimen/movie_details_guideline_bottom" />
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar_details"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/app_bar_height"
                 android:fitsSystemWindows="true"
@@ -54,7 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/orig"
+                        tools:src="@drawable/orig"
                         tools:ignore="ContentDescription" />
 
                     <View

@@ -3,6 +3,10 @@ package ru.meseen.dev.androidacademy.data.retrofit.service
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import ru.meseen.dev.androidacademy.data.base.entity.CastEntity
+import ru.meseen.dev.androidacademy.data.base.entity.GenresEntity
+import ru.meseen.dev.androidacademy.data.base.entity.MovieAdditionalDataEntity
+import ru.meseen.dev.androidacademy.data.base.entity.relations.MovieItemEntity
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.CastMovieResponse
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.PersonCastResponse
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.SearchMoviesResponse
@@ -13,7 +17,7 @@ import ru.meseen.dev.androidacademy.data.retrofit.pojo.main.BaseListMovies
 interface MovieService {
 
 
-    @GET("/search/{path}")
+    @GET("search/{path}")
     suspend fun searchMovies(
         @Path("path") searchType: String,
         @Query("language") language: String = "en-US",
@@ -66,10 +70,16 @@ interface MovieService {
         @Query("language") language: String = "en-US"
     ): PersonCastResponse
 
+
     @GET("genre/movie/list")
     suspend fun getGenresList(
         @Query("language") language: String = "en-US"
     ): GenresItems
+
+    @GET("configuration")
+    suspend fun getConfig(): ConfigurationResponse
+
+
 
 
 }

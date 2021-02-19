@@ -11,6 +11,8 @@ data class PageKeyEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = BaseColumns._ID)
     val _id: Long? = null,
+    @ColumnInfo(name= "movieId")
+    val movieId: Long,
     @ColumnInfo(name = "prevPage")
     val prevPage: Int?,
     @ColumnInfo(name = "nextPage")

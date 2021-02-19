@@ -7,4 +7,5 @@ import ru.meseen.dev.androidacademy.data.base.query.MovieListableQuery
 
 interface MovieListRepository {
     fun loadMoviesList(query: MovieListableQuery, pageSize: Int): Flow<PagingData<MovieDataEntity>>
+
 }

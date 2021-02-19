@@ -1,6 +1,8 @@
 package ru.meseen.dev.androidacademy.data.base.query
 
-interface SearchQuery : MovieListableQuery {
+import java.io.Serializable
+
+interface SearchQuery : MovieListableQuery, Serializable {
     fun getSearchQuery(): String
 }
 

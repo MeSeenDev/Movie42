@@ -3,6 +3,10 @@ package ru.meseen.dev.androidacademy.data.retrofit.pojo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
+/**
+ * @see <a href="https://developers.themoviedb.org/3/people/get-person-details">API Get the primary person details by id.</a>
+ */
 @Serializable
 data class PersonCastResponse(
 

@@ -20,4 +20,20 @@
     <string name="nav_up_coming">Up Coming</string>
     <string name="toolbar_search">Search</string>
 
+
+    <string name="reviews">REVIEWS</string>
+
+
+
+    <string name="top_rated">Top Rated</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="popular">Popular</string>
+    <string name="upcoming">Up Coming</string>
+    <string name="movie_search">Movie Search</string>
+
+
+
+    <!--TOP_VIEW_LIST("top_rated"), NOW_PLAYING_VIEW__LIST("now_playing")
+        , POPULAR_VIEW_LIST("popular"), UPCOMING_VIEW_LIST("upcoming")-->
+
 </resources>

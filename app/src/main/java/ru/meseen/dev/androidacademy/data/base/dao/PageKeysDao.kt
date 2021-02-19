@@ -12,9 +12,12 @@ interface PageKeysDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(keys: List<PageKeyEntity>)
 
-    @Query("SELECT * FROM PAGE_TABLE_NAME WHERE _id = :id")
-    suspend fun remoteKeyById(id: Long): PageKeyEntity?
+    @Query("SELECT * FROM PAGE_TABLE_NAME WHERE movieId = :id AND listType = :listType")
+    suspend fun remoteKeyById(id: Long, listType: String): PageKeyEntity?
 
     @Query("DELETE FROM PAGE_TABLE_NAME WHERE listType = :listType")
-    suspend fun deleteByListType(listType: String)
+    suspend fun deleteByListType(listType: String): Int
+
+    @Query("DELETE FROM PAGE_TABLE_NAME")
+    suspend fun clearRemoteKeys()
 }

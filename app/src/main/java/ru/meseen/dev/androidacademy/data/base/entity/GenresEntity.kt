@@ -11,7 +11,7 @@ import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.GenresItem
 @Entity(
     tableName = GENRES_TABLE_NAME,
     indices = [
-        Index(value = ["id"], unique = true)
+        Index(value = ["name"], unique = true)
     ]
 )
 data class GenresEntity(
@@ -29,7 +29,7 @@ data class GenresEntity(
         genresName = genresItems.genresName,
         language = language,
 
-    )
+        )
 
 
 }

@@ -18,7 +18,9 @@ import kotlinx.serialization.Serializable
  * @param adult: Минимальный допустимый возраст "true" для старичков и "false" для неокрепших умов
  * @param releaseDate: дата выхода фильма
  * @param video: наличие видео
+ * @param runtime: Длительность фильма
  * @param imdbId pattern: ^tt[0-9]{7}
+ * @see <a href="https://developers.themoviedb.org/3/movies/get-movie-details">API get Movie Details</a>
  */
 
 @Serializable

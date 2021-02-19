@@ -3,6 +3,11 @@ package ru.meseen.dev.androidacademy.data.retrofit.pojo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
+/**
+ *
+ *@see <a href="https://developers.themoviedb.org/3/people/get-person-movie-credits">API Get the movie credits for a person.</a>
+ */
 @Serializable
 data class CastMovieResponse(
 

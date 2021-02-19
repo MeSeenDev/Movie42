@@ -10,23 +10,24 @@ import retrofit2.HttpException
 import ru.meseen.dev.androidacademy.data.base.RoomDataBase
 import ru.meseen.dev.androidacademy.data.base.entity.MovieDataEntity
 import ru.meseen.dev.androidacademy.data.base.entity.PageKeyEntity
-import ru.meseen.dev.androidacademy.data.base.query.MovieListableQuery
-import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient.START_PAGE
+import ru.meseen.dev.androidacademy.data.base.query.MovieSearchQuery
+import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient
 import ru.meseen.dev.androidacademy.data.retrofit.service.MovieService
 import java.io.IOException
 import java.io.InvalidObjectException
 import java.util.*
 
 @ExperimentalPagingApi
-class MovieRemoteMediator(
-    private val query: MovieListableQuery,
+class SearchRemoteMediator(
+    private val query: MovieSearchQuery,
     private val service: MovieService,
     private val dataBase: RoomDataBase
 ) : RemoteMediator<Int, MovieDataEntity>() {
 
     companion object {
-        const val TAG = "RemoteMediator"
+        const val TAG = "SearchRemoteMediator"
     }
+
 
     private val movieDao = dataBase.movieDao()
     private val pageKeyDao = dataBase.pageKeyDao()
@@ -36,24 +37,20 @@ class MovieRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, MovieDataEntity>
     ): MediatorResult {
-
-
         return try {
             val page = when (loadType) {
 
                 LoadType.REFRESH -> {
-                    Log.d(TAG, "load: REFRESH")
                     val remoteKeys =
                         getRemoteKeyClosestToCurrentPosition(state, query.getMoviePath())
-                    remoteKeys?.nextPage?.minus(1) ?: START_PAGE
+                    remoteKeys?.nextPage?.minus(1) ?: RetrofitClient.START_PAGE
                 }
                 LoadType.PREPEND -> {
                     // LoadType - PREPEND, значит некоторые данные были ранее загружены,
                     // чтобы мы могли получить удаленные ключи
                     // Если удаленные ключи равны null, значит, руки из жопы получаем недопустимое состояние от туда и Исключение
-                    Log.d(TAG, "load: PREPEND")
                     val remoteKeys = getRemoteKeyForFirstItem(state, query.getMoviePath())
-                        ?: throw InvalidObjectException("Remote key and the prevKey should not be null  руки из жопы $state")
+                        ?: throw InvalidObjectException("Remote key and the prevKey should not be null")
 
                     remoteKeys.prevPage
                         ?: return MediatorResult.Success(  // Если предыдущий ключ равен нулю, мы не можем запросить больше данных
@@ -62,9 +59,9 @@ class MovieRemoteMediator(
                     remoteKeys.prevPage
                 }
                 LoadType.APPEND -> {
-                    Log.d(TAG, "load: APPEND")
-
                     val remoteKeys = getRemoteKeyForLastItem(state, query.getMoviePath())
+                    Log.d(TAG, "APPEND load: $remoteKeys")
+
                     if (remoteKeys?.nextPage == null) {
                         throw InvalidObjectException("Remote key should not be null for $loadType")
                     }
@@ -73,17 +70,20 @@ class MovieRemoteMediator(
             }
 
 
+            Log.d(TAG, "load Query : $query, $page")
 
-
-
-
-            Log.d(TAG, "load ${query.getMoviePath()} Query : $query, $page")
-            val resultItem = service.loadList(
-                listType = query.getMoviePath(),
+            val resultItem = service.searchMovies(
+                searchType = query.getMoviePath(),
                 language = query.getMoviesLanguage(),
+                region = query.getMoviesRegion(),
                 page = page,
-                region = query.getMoviesRegion()
+                year = query.getMovieYear(),
+                primaryReleaseYear = query.getMoviePrimaryReleaseYear(),
+                include_adult = query.isMovieIncludeAdult(),
+                query = query.getSearchQuery()
             )
+
+
 
             dataBase.withTransaction {
                 genres = dataBase.movieDao()
@@ -91,28 +91,26 @@ class MovieRemoteMediator(
                     .map { it.genres_id to it.genresName.capitalize(Locale.ROOT) }.toMap()
             }
 
-            val resultEntity =
-                resultItem.getMovieResults().map { movieItem ->
-                    MovieDataEntity(
-                        movieItem,
-                        query.getMoviePath(),
-                        genres = movieItem.genreIds.filterNotNull()
-                            .joinToString { genres[it] ?: "" }
-                    )
-                }
+            Log.d(TAG, "load: $resultItem")
+            val resultEntity = resultItem.results.map { movieItem ->
+                MovieDataEntity(
+                    movieItem,
+                    query.getMoviePath(),
+                    genres = movieItem.genreIds.filterNotNull()
+                        .joinToString { genres[it] ?: "" }
+                )
+            }
 
             val endOfPaginationReached = resultEntity.isEmpty()
 
             dataBase.withTransaction {
-                Log.d(TAG, "load:withTransaction ${loadType.name}")
+
                 if (loadType == LoadType.REFRESH) {
-                    Log.d(TAG, "load: deleteByListType")
                     pageKeyDao.deleteByListType(query.getMoviePath())
                     movieDao.deleteByListType(query.getMoviePath())
-
                 }
 
-                val prevPage = if (page == START_PAGE) null else page - 1
+                val prevPage = if (page == RetrofitClient.START_PAGE) null else page - 1
                 val nextPage = if (endOfPaginationReached) null else page + 1
 
                 val keys = resultEntity.map {
@@ -123,17 +121,16 @@ class MovieRemoteMediator(
                         listType = query.getMoviePath()
                     )
                 }
-                movieDao.insertAll(*resultEntity.toTypedArray())
                 pageKeyDao.insertAll(keys)
+                movieDao.insertAll(*resultEntity.toTypedArray())
             }
-
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (ioe: IOException) {
-            Log.wtf(TAG, "load: ${ioe.localizedMessage}")
+            Log.d(TAG, "load: ${ioe.localizedMessage}")
             MediatorResult.Error(ioe)
         } catch (httpE: HttpException) {
-            Log.wtf(TAG, "load: ${httpE.localizedMessage}")
+            Log.d(TAG, "load: ${httpE.localizedMessage}")
             MediatorResult.Error(httpE)
         }
     }
@@ -145,7 +142,6 @@ class MovieRemoteMediator(
     ): PageKeyEntity? {
         // Берем последнюю полученную страницу, содержащую элементы.
         // С этой последней страницы получаем последний элемент
-
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { resultEntity ->
                 dataBase.pageKeyDao()
@@ -154,8 +150,6 @@ class MovieRemoteMediator(
                         listType
                     ) // получение последнего удаленного ключа или null
             }
-
-
     }
 
     private suspend fun getRemoteKeyForFirstItem(
@@ -186,5 +180,6 @@ class MovieRemoteMediator(
             }
         }
     }
+
 
 }

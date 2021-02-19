@@ -1,6 +1,8 @@
 package ru.meseen.dev.androidacademy.data.base.query
 
-interface MovieSearchQuery : SearchQuery {
+import java.io.Serializable
+
+interface MovieSearchQuery : SearchQuery , Serializable {
     fun getMovieYear(): String
     fun getMoviePrimaryReleaseYear(): String
     fun isMovieIncludeAdult(): Boolean

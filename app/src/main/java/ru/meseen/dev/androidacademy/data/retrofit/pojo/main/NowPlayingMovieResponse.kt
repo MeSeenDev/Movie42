@@ -2,8 +2,16 @@ package ru.meseen.dev.androidacademy.data.retrofit.pojo.main
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieItem
+import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieItemResponse
 
+/**
+ * @param dates период дат
+ * @param page Страница
+ * @param totalPages Всего страниц
+ * @param results Список результатов
+ * @param totalResults всего результатов на всех страницах
+ * @see <a href="https://developers.themoviedb.org/3/movies/get-now-playing">API sample lists</a>
+ */
 @Serializable
 data class NowPlayingMovieResponse(
 
@@ -17,7 +25,7 @@ data class NowPlayingMovieResponse(
     val totalPages: Int,
 
     @SerialName("results")
-    val results: List<MovieItem>,
+    val results: List<MovieItemResponse>,
 
     @SerialName("total_results")
     val totalResults: Int
@@ -32,7 +40,7 @@ data class NowPlayingMovieResponse(
     override fun getMovieTotalPages(): Int = totalPages
 
 
-    override fun getMovieResults(): List<MovieItem> = results
+    override fun getMovieResults(): List<MovieItemResponse> = results
 
 
     override fun getMovieTotalResults(): Int = totalResults

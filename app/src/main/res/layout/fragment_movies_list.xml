@@ -14,9 +14,9 @@
         android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="top"
         android:minHeight="?attr/actionBarSize"
+        app:menu="@menu/main_menu"
         app:navigationIcon="@drawable/ic_combined_shape"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Movies list" />
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"

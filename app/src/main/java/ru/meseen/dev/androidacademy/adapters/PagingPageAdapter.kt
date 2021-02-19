@@ -1,4 +1,4 @@
-package ru.meseen.dev.androidacademy.adapter
+package ru.meseen.dev.androidacademy.adapters
 
 import android.app.Application
 import android.view.LayoutInflater
@@ -7,11 +7,10 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.meseen.dev.androidacademy.R
-import ru.meseen.dev.androidacademy.adapter.vh.MovieItemHolder
+import ru.meseen.dev.androidacademy.adapters.vh.MovieItemHolder
 import ru.meseen.dev.androidacademy.data.base.entity.MovieDataEntity
 
 class PagingPageAdapter(
-    private val application: Application,
     private val listener: MovieClickListener
 ) :
     PagingDataAdapter<MovieDataEntity, RecyclerView.ViewHolder>(MOVIES_COMPARATOR) {
@@ -23,26 +22,30 @@ class PagingPageAdapter(
                 oldItem: MovieDataEntity,
                 newItem: MovieDataEntity
             ): Boolean {
-                return oldItem.movieId == newItem.movieId
+                return oldItem.overview == newItem.overview && oldItem.voteCount == newItem.voteCount && oldItem.title == newItem.title && oldItem.listType == newItem.listType
             }
+
+            override fun getChangePayload(
+                oldItem: MovieDataEntity,
+                newItem: MovieDataEntity
+            ): Any? = Any()
 
             override fun areContentsTheSame(
                 oldItem: MovieDataEntity,
                 newItem: MovieDataEntity
-            ): Boolean {
-                return oldItem == newItem
-            }
+            ): Boolean = oldItem == newItem
+
 
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view =  LayoutInflater.from(parent.context).inflate(R.layout.main_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.main_item, parent, false)
         val holder = MovieItemHolder(view)
-        view.setOnClickListener{
+        view.setOnClickListener {
             val position = holder.absoluteAdapterPosition
             val curItem = getItem(position)
-            curItem?.let { it1 -> listener.onItemClick(it1.movieId) }
+            curItem?.let { it1 -> listener.onItemClick(it1.movieId.toInt()) }
         }
         return holder
     }
@@ -50,12 +53,12 @@ class PagingPageAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         if (holder is MovieItemHolder) {
-            getItem(position)?.let { holder.bind(it, application = application) }
+            getItem(position)?.let { holder.bind(it) }
         }
     }
 
 }
 
 interface MovieClickListener {
-    fun onItemClick(movieID: Long)
+    fun onItemClick(movieID: Int)
 }

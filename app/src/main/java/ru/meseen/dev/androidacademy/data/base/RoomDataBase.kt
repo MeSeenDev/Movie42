@@ -20,7 +20,7 @@ abstract class RoomDataBase : RoomDatabase() {
     abstract fun pageKeyDao(): PageKeysDao
 
     companion object {
-        private const val DATA_BASE_NAME = "MOVIE_DATA_BASE"
+        private const val DATA_BASE_NAME = "MOVIE_DATA_BASE.db"
         const val TABLE_NAME = "MOVIE_TABLE"
         const val CAST_TABLE_NAME = "CAST_TABLE"
         const val GENRES_TABLE_NAME = "GENRES_TABLE"
@@ -31,15 +31,13 @@ abstract class RoomDataBase : RoomDatabase() {
         @Volatile
         private var INSTANCE: RoomDataBase? = null
 
-        fun getDatabase(applicationContext: Context, scope: CoroutineScope): RoomDataBase {
+        fun getDatabase(applicationContext: Context): RoomDataBase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     applicationContext.applicationContext,
                     RoomDataBase::class.java,
                     DATA_BASE_NAME
                 )
-                    .fallbackToDestructiveMigration()
-                    .addCallback(MovieDatabaseCallback(applicationContext, scope))
                     .build()
                 INSTANCE = instance
                 instance
@@ -48,22 +46,6 @@ abstract class RoomDataBase : RoomDatabase() {
     }
 
 
-    private class MovieDatabaseCallback(
-        private val context: Context,
-        private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
-        // Пока ничего
-
-        suspend fun populateDatabase(
-            movieListableDao: MovieListableDao,
-            fakeInternetData: List<MovieDataEntity>
-        ) {
-            movieListableDao.deleteAll()
-            fakeInternetData.asSequence().forEach { movieListableDao.insert(it) }
-
-
-        }
-    }
 
 
 }

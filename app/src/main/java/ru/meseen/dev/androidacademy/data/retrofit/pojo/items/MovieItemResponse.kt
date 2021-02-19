@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
  * @param title: Имя фильма Title
  * @param voteAverage: Рейтинг фильма от 0..10 "vote_average"
  * @param genreIds: Жанры фильма
- * runtime: Длительность фильма "runtime" --!!
  * @param originalLanguage: язык оригинала фильма
  * @param originalTitle: Название на оригинальном (Родном) языке
  * @param backdropPath: Адрес изображения на фоне дестрипшн фрагмента
@@ -18,18 +17,19 @@ import kotlinx.serialization.Serializable
  * @param adult: Минимальный допустимый возраст "true" для старичков и "false" для неокрепших умов
  * @param releaseDate: дата выхода фильма
  * @param video: наличие видео
+ * @see <a href="https://developers.themoviedb.org/3/movies/get-top-rated-movies">API example List</a>
  */
 @Serializable
-data class MovieItem(
+data class MovieItemResponse(
 
 	@SerialName("overview")
-	val overview: String = "none",
+	val overview: String ,
 
 	@SerialName("original_language")
-	val originalLanguage: String = "none",
+	val originalLanguage: String,
 
 	@SerialName("original_title")
-	val originalTitle: String = "none",
+	val originalTitle: String ,
 
 	@SerialName("video")
 	val video: Boolean = false,
@@ -41,26 +41,26 @@ data class MovieItem(
 	val genreIds: List<Int?> = listOf(),
 
 	@SerialName("poster_path")
-	val posterPath: String? = null,
+	val posterPath: String?,
 
 	@SerialName("backdrop_path")
-	val backdropPath: String? = null,
+	val backdropPath: String?,
 
 	@SerialName("release_date")
-	val releaseDate: String = "none",
+	val releaseDate: String,
 
 	@SerialName("popularity")
-	val popularity: Double = -1.0,
+	val popularity: Double,
 
 	@SerialName("vote_average")
-	val voteAverage: Double = -1.0,
+	val voteAverage: Double,
 
 	@SerialName("id")
-	val movieId: Long = -1,
+	val movieId: Long,
 
 	@SerialName("adult")
-	val adult: Boolean = false,
+	val adult: Boolean,
 
 	@SerialName("vote_count")
-	val voteCount: Int = -1
+	val voteCount: Int
 )
