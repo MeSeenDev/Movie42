@@ -35,25 +35,25 @@ data class MovieImagesResponse(
 data class BackdropsItem(
 
 	@SerialName("aspect_ratio")
-	val aspectRatio: Double,
+	val aspectRatio: Double = 0.0,
 
 	@SerialName("file_path")
-	val imageFilePath: String,
+	val imageFilePath: String = "none",
 
 	@SerialName("vote_average")
-	val voteAverage: Double,
+	val voteAverage: Double = 0.0,
 
 	@SerialName("width")
-	val width: Int,
+	val width: Int = -1,
 
 	@SerialName("iso_639_1")
-	val language: String?,
+	val language: String? = null,
 
 	@SerialName("vote_count")
-	val voteCount: Int,
+	val voteCount: Int = -1,
 
 	@SerialName("height")
-	val height: Int
+	val height: Int = -1
 )
 
 /**
@@ -69,23 +69,23 @@ data class BackdropsItem(
 data class PostersItem(
 
 	@SerialName("aspect_ratio")
-	val aspectRatio: Double,
+	val aspectRatio: Double = 0.0,
 
 	@SerialName("file_path")
-	val imageFilePath: String,
+	val imageFilePath: String = "none",
 
 	@SerialName("vote_average")
-	val voteAverage: Double,
+	val voteAverage: Double = 0.0,
 
 	@SerialName("width")
-	val width: Int,
+	val width: Int = -1,
 
 	@SerialName("iso_639_1")
-	val language: String,
+	val language: String = "none",
 
 	@SerialName("vote_count")
-	val voteCount: Int,
+	val voteCount: Int = -1,
 
 	@SerialName("height")
-	val height: Int
+	val height: Int = -1
 )

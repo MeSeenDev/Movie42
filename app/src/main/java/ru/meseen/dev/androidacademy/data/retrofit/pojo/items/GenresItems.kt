@@ -17,9 +17,9 @@ data class GenresItems(
 data class GenresItem(
 
     @SerialName("id")
-    val genresId: Int,
+    val genresId: Int = -1,
 
     @SerialName("name")
-    val genresName: String
+    val genresName: String = "none"
 
 )

@@ -23,13 +23,13 @@ import kotlinx.serialization.Serializable
 data class MovieItemResponse(
 
 	@SerialName("overview")
-	val overview: String ,
+	val overview: String = "none",
 
 	@SerialName("original_language")
-	val originalLanguage: String,
+	val originalLanguage: String = "none",
 
 	@SerialName("original_title")
-	val originalTitle: String ,
+	val originalTitle: String = "none",
 
 	@SerialName("video")
 	val video: Boolean = false,
@@ -41,26 +41,26 @@ data class MovieItemResponse(
 	val genreIds: List<Int?> = listOf(),
 
 	@SerialName("poster_path")
-	val posterPath: String?,
+	val posterPath: String? = null,
 
 	@SerialName("backdrop_path")
-	val backdropPath: String?,
+	val backdropPath: String? = null,
 
 	@SerialName("release_date")
-	val releaseDate: String,
+	val releaseDate: String = "none",
 
 	@SerialName("popularity")
-	val popularity: Double,
+	val popularity: Double = 0.0,
 
 	@SerialName("vote_average")
-	val voteAverage: Double,
+	val voteAverage: Double = 0.0,
 
 	@SerialName("id")
-	val movieId: Long,
+	val movieId: Long = -1,
 
 	@SerialName("adult")
-	val adult: Boolean,
+	val adult: Boolean = false,
 
 	@SerialName("vote_count")
-	val voteCount: Int
+	val voteCount: Int = -1
 )

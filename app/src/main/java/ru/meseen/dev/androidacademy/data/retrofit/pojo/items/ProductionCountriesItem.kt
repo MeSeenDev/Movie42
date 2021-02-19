@@ -11,8 +11,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProductionCountriesItem(
     @SerialName("iso_3166_1")
-    val countryCode: String,
+    val countryCode: String = "none",
 
     @SerialName("name")
-    val name: String,
+    val name: String = "none",
 )

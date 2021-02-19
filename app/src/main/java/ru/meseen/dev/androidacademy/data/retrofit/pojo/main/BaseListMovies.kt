@@ -16,16 +16,16 @@ import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieItemResponse
 @Serializable
 class BaseListMovies(
     @SerialName("page")
-    val page: Int,
+    val page: Int = -1,
 
     @SerialName("total_pages")
-    val totalPages: Int,
+    val totalPages: Int = -1,
 
     @SerialName("results")
-    val results: List<MovieItemResponse>,
+    val results: List<MovieItemResponse> = listOf(),
 
     @SerialName("total_results")
-    val totalResults: Int
+    val totalResults: Int = -1
 ) : MovieListable {
 
     override fun getMoviePage(): Int = page

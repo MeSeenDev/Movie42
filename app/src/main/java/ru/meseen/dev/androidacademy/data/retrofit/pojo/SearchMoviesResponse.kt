@@ -12,16 +12,16 @@ import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieItemResponse
 data class SearchMoviesResponse(
 
     @SerialName("page")
-	val page: Int,
+    val page: Int = 1,
 
     @SerialName("total_pages")
-	val totalPages: Int,
+    val totalPages: Int = 0,
 
     @SerialName("results")
-	val results: List<MovieItemResponse>,
+    val results: List<MovieItemResponse> = listOf(),
 
     @SerialName("total_results")
-	val totalResults: Int
+    val totalResults: Int = 0
 )
 
 

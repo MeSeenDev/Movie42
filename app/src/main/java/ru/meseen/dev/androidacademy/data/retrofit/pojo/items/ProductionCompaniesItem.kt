@@ -13,14 +13,14 @@ import kotlinx.serialization.Serializable
 data class ProductionCompaniesItem(
 
     @SerialName("id")
-    val id: Int,
+    val id: Int = -1,
 
     @SerialName("name")
-    val name: String,
+    val name: String = "none",
 
     @SerialName("logo_path")
     val logoPath: String? = null,
 
     @SerialName("origin_country")
-    val originCountry: String
+    val originCountry: String = "none"
 )

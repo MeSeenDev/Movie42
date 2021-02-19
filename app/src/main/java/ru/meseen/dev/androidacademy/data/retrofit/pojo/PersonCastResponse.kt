@@ -11,44 +11,44 @@ import kotlinx.serialization.Serializable
 data class PersonCastResponse(
 
 	@SerialName("also_known_as")
-	val alsoKnownAs: List<String>,
+	val alsoKnownAs: List<String> = listOf(),
 
 	@SerialName("birthday")
-	val birthday: String,
+	val birthday: String = "none",
 
 	@SerialName("gender")
-	val gender: Int,
+	val gender: Int = -1,
 
 	@SerialName("imdb_id")
-	val imdbId: String,
+	val imdbId: String = "none",
 
 	@SerialName("known_for_department")
-	val knownForDepartment: String,
+	val knownForDepartment: String = "none",
 
 	@SerialName("profile_path")
-	val profilePath: String,
+	val profilePath: String = "none",
 
 	@SerialName("biography")
-	val biography: String,
+	val biography: String = "none",
 
 	@SerialName("deathday")
-	val deathday: String?,
+	val deathday: String? = null,
 
 	@SerialName("place_of_birth")
-	val placeOfBirth: String,
+	val placeOfBirth: String = "none",
 
 	@SerialName("popularity")
-	val popularity: Double,
+	val popularity: Double = 0.0,
 
 	@SerialName("name")
-	val name: String,
+	val name: String = "none",
 
 	@SerialName("id")
-	val id: Int,
+	val id: Int = -1,
 
 	@SerialName("adult")
-	val adult: Boolean,
+	val adult: Boolean = false,
 
 	@SerialName("homepage")
-	val homepage: String?
+	val homepage: String? = null
 )

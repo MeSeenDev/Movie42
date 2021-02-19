@@ -19,6 +19,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var searchView: SearchView
 
+    companion object{
+        const val TAG = "MainActivity"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     private val textListener = object :
         SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
-            Log.d("SearchItem", "onQueryTextSubmit: $query")
+            Log.d(TAG, "onQueryTextSubmit: $query")
 
             val redactorBottomSheet = SearchFragment.getInstance(
                 application,
@@ -55,8 +59,8 @@ class MainActivity : AppCompatActivity() {
                     region = "RU"
                 )
             )
-            hideKeyboard(this@MainActivity)
             searchView.clearFocus()
+            searchView.setQuery("",true)
             searchView.onActionViewCollapsed()
 
             redactorBottomSheet.show(
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onQueryTextChange(newText: String?): Boolean { // после enter
-            Log.d("SearchItem", "onQueryTextChange: $newText")
+            Log.d(TAG, "onQueryTextChange: $newText")
 
 
             return true
@@ -77,17 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun hideKeyboard(activity: Activity) {
-        //Находим View с фокусом, так мы сможем получить правильный window token
-        //Если такого View нет, то создадим одно, это для получения window token из него
-        val view = activity.currentFocus ?: View(activity)
-        val inputMethod =
-            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethod.hideSoftInputFromWindow(
-            view.windowToken,
-            InputMethodManager.SHOW_IMPLICIT
-        )
-    }
+
 
 
 }

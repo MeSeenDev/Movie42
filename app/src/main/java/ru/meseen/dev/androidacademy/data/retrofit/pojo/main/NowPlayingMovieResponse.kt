@@ -47,12 +47,13 @@ data class NowPlayingMovieResponse(
 
 
 }
+
 @Serializable
 data class MovieDates(
 
     @SerialName("maximum")
-    val maximum: String,
+    val maximum: String = "none",
 
     @SerialName("minimum")
-    val minimum: String
+    val minimum: String = "none"
 )

@@ -27,79 +27,79 @@ import kotlinx.serialization.Serializable
 data class MovieAdditionalDataResponse(
 
     @SerialName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String = "none",
 
     @SerialName("imdb_id")
-    val imdbId: String?,
+    val imdbId: String? = null,
 
     @SerialName("video")
-    val video: Boolean,
+    val video: Boolean = false,
 
     @SerialName("title")
-    val title: String,
+    val title: String = "none",
 
     @SerialName("backdrop_path")
-    val backdropPath: String?,
+    val backdropPath: String? = null,
 
     @SerialName("revenue")
-    val revenue: Int,
+    val revenue: Int = -1,
 
     @SerialName("genres")
-    val genres: List<GenresItem>,
+    val genres: List<GenresItem> = listOf(),
 
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double = 0.0,
 
     @SerialName("production_countries")
-    val productionCountries: List<ProductionCountriesItem>,
+    val productionCountries: List<ProductionCountriesItem> = listOf(),
 
     @SerialName("id")
-    val id: Int,
+    val id: Int = -1,
 
     @SerialName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int = -1,
 
     @SerialName("budget")
-    val budget: Int,
+    val budget: Int = -1,
 
     @SerialName("overview")
-    val overview: String?,
+    val overview: String? = null,
 
     @SerialName("original_title")
-    val originalTitle: String,
+    val originalTitle: String = "none",
 
     @SerialName("runtime")
-    val runtime: Int?,
+    val runtime: Int? = null,
 
     @SerialName("poster_path")
-    val posterPath: String?,
+    val posterPath: String? = null,
 
     @SerialName("spoken_languages")
-    val spokenLanguages: List<SpokenLanguagesItem>,
+    val spokenLanguages: List<SpokenLanguagesItem> = listOf(),
 
     @SerialName("production_companies")
-    val productionCompanies: List<ProductionCompaniesItem>,
+    val productionCompanies: List<ProductionCompaniesItem> = listOf(),
 
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String = "none",
 
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double = 0.0,
 
     /*@SerialName("belongs_to_collection")
     val belongsToCollection: String?,*/   // Либо Null либо не понятный объект , понадобиться расроментирую
 
     @SerialName("tagline")
-    val tagline: String?,
+    val tagline: String? = null,
 
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean = false,
 
     @SerialName("homepage")
-    val homepage: String,
+    val homepage: String = "none",
 
     @SerialName("status")
-    val status: String
+    val status: String = "none"
 )
 
 
