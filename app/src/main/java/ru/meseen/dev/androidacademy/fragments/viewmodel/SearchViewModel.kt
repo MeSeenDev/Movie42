@@ -90,4 +90,8 @@ class SearchViewModel(
         }
     }
 
+    override fun onCleared() {
+        clearSearchResults()
+        super.onCleared()
+    }
 }

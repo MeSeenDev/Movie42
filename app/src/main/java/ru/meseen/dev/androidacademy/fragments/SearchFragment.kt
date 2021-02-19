@@ -193,8 +193,5 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
     }
 
 
-    override fun onDestroyView() {
-        viewModel.clearSearchResults()
-        super.onDestroyView()
-    }
+
 }
