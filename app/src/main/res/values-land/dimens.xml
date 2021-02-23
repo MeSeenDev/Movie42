@@ -3,4 +3,7 @@
 
     <dimen name="cast_image_width">180dp</dimen>
     <dimen name="cast_image_height">180dp</dimen>
+
+
+
 </resources>

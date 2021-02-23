@@ -25,11 +25,17 @@
 
 
 
+
     <string name="top_rated">Top Rated</string>
     <string name="now_playing">Now Playing</string>
     <string name="popular">Popular</string>
     <string name="upcoming">Up Coming</string>
     <string name="movie_search">Movie Search</string>
+    <string name="retry">Retry</string>
+    <string name="channel_new_movie">New movie received</string>
+    <string name="channel_new_movie_description">notify when new movie found in tops</string>
+    <string name="notification_new_movie">New movie in top: </string>
+    <string name="notification_add_to_calendar">Add to Calendar</string>
 
 
 

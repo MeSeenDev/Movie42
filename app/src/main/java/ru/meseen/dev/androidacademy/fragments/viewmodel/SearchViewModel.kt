@@ -18,8 +18,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.data.base.query.MovieSearchQuery
 import ru.meseen.dev.androidacademy.data.base.query.impl.SearchViewQuery
 import ru.meseen.dev.androidacademy.data.repositories.SearchRepository
-import ru.meseen.dev.androidacademy.data.repositories.impl.Repository
-import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModel.Companion.KEY_MOVIES
+import ru.meseen.dev.androidacademy.support.ListType.*
 
 class SearchViewModel(
     val repository: SearchRepository,
@@ -28,7 +27,7 @@ class SearchViewModel(
 
     companion object {
         const val KEY_SEARCH_MOVIES = "KEY_SEARCH_MOVIES"
-        val default = SearchViewQuery(query = "Star Wars",path = Repository.ListType.SEARCH_VIEW_LIST.selection)
+        val default = SearchViewQuery(query = "Star Wars",path = SEARCH_VIEW_LIST.selection)
         const val TAG = "SearchViewModel"
     }
 

@@ -3,10 +3,6 @@ package ru.meseen.dev.androidacademy.data.retrofit.service
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.meseen.dev.androidacademy.data.base.entity.CastEntity
-import ru.meseen.dev.androidacademy.data.base.entity.GenresEntity
-import ru.meseen.dev.androidacademy.data.base.entity.MovieAdditionalDataEntity
-import ru.meseen.dev.androidacademy.data.base.entity.relations.MovieItemEntity
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.CastMovieResponse
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.PersonCastResponse
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.SearchMoviesResponse

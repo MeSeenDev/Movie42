@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import kotlinx.coroutines.CoroutineScope
 import ru.meseen.dev.androidacademy.data.base.dao.MovieListableDao
 import ru.meseen.dev.androidacademy.data.base.dao.PageKeysDao
 import ru.meseen.dev.androidacademy.data.base.entity.*

@@ -1,6 +1,5 @@
 package ru.meseen.dev.androidacademy.adapters
 
-import android.app.Application
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -22,7 +21,8 @@ class PagingPageAdapter(
                 oldItem: MovieDataEntity,
                 newItem: MovieDataEntity
             ): Boolean {
-                return oldItem.overview == newItem.overview && oldItem.voteCount == newItem.voteCount && oldItem.title == newItem.title && oldItem.listType == newItem.listType
+                return oldItem.description == newItem.description && oldItem.voteCount == newItem.voteCount
+                        && oldItem.title == newItem.title && oldItem.listType == newItem.listType
             }
 
             override fun getChangePayload(
@@ -51,7 +51,6 @@ class PagingPageAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
         if (holder is MovieItemHolder) {
             getItem(position)?.let { holder.bind(it) }
         }

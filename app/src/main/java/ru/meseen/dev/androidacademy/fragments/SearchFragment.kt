@@ -1,7 +1,6 @@
 package ru.meseen.dev.androidacademy.fragments
 
 import android.app.Application
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,11 +30,11 @@ import ru.meseen.dev.androidacademy.adapters.MovieClickListener
 import ru.meseen.dev.androidacademy.adapters.PagingPageAdapter
 import ru.meseen.dev.androidacademy.data.base.query.SearchQuery
 import ru.meseen.dev.androidacademy.data.base.query.impl.SearchViewQuery
-import ru.meseen.dev.androidacademy.data.repositories.impl.Repository
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModelFactory
 import ru.meseen.dev.androidacademy.fragments.viewmodel.SearchViewModel
 import ru.meseen.dev.androidacademy.fragments.viewmodel.SearchViewModel.Companion.KEY_SEARCH_MOVIES
 import ru.meseen.dev.androidacademy.support.FragmentsTags
+import ru.meseen.dev.androidacademy.support.ListType.*
 
 class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
 
@@ -76,7 +75,9 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         searchQuery = arguments?.getSerializable(KEY_SEARCH_MOVIES) as SearchQuery
+        @Suppress("DEPRECATION")
         retainInstance = true
+        Log.d(TAG, "onCreate: Fragment")
     }
 
     override fun onCreateView(
@@ -105,6 +106,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
     }
 
 
+    @ExperimentalSerializationApi
     @ExperimentalPagingApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,8 +121,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         recyclerView.adapter = adapter
         // Временное решение
 
-        val quantity =
-            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
+        val quantity = view.resources.getInteger(R.integer.main_item_card_span)
         gridLayoutManager = GridLayoutManager(application.baseContext, quantity)
         gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
         recyclerView.layoutManager = gridLayoutManager
@@ -136,7 +137,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         lifecycleScope.launchWhenCreated {
             viewModel.searchMovies.collectLatest {
                 adapter.submitData(it)
-                Log.d(TAG, "launchWhenCreated: searchMovies $it")
+                Log.d(TAG, "launchWhenCreated: searchMovies append Data")
             }
         }
         lifecycleScope.launchWhenCreated {
@@ -165,7 +166,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
             viewModel.reQuery(
                 SearchViewQuery(
                     query = query as String, language = "ru-RU", region = "RU",
-                    path = Repository.ListType.SEARCH_VIEW_LIST.selection
+                    path = SEARCH_VIEW_LIST.selection
                 )
             )
             Log.d(TAG, "onStateChanged: reQuery $query")
@@ -173,7 +174,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {
-
+            //TODO отложенный ввод
             return true
 
         }
@@ -191,7 +192,6 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         frag.show(childFragmentManager, FragmentsTags.MOVIE_DETAILS_TAG.toString())
 
     }
-
 
 
 }

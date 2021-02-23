@@ -13,9 +13,9 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.ExperimentalSerializationApi
-import ru.meseen.dev.androidacademy.data.repositories.MovieListRepository
-import ru.meseen.dev.androidacademy.data.repositories.impl.Repository
 import ru.meseen.dev.androidacademy.data.base.query.impl.MovieListQuery
+import ru.meseen.dev.androidacademy.data.repositories.MovieListRepository
+import ru.meseen.dev.androidacademy.support.ListType
 
 class MovieViewModel(
     repository: MovieListRepository,
@@ -58,11 +58,11 @@ class MovieViewModel(
     ).flattenMerge(2)
 
     @ExperimentalSerializationApi
-    private fun checkIfTypeDataPresent(listType: Repository.ListType) =
+    private fun checkIfTypeDataPresent(listType: ListType) =
         (handle.get<String>(KEY_MOVIES)) != (listType.selection)
 
     @ExperimentalSerializationApi
-    fun switchTypeList(listType: Repository.ListType) {
+    fun switchTypeList(listType: ListType) {
         if (!checkIfTypeDataPresent(listType)) return
         Log.d(TAG, "switchTypeList: ${listType.selection}")
         clearListCh.offer(Unit)

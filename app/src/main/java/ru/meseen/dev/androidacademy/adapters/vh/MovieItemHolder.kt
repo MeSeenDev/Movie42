@@ -22,6 +22,10 @@ import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient.getImageUrl
 import kotlin.math.round
 
 class MovieItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    companion object{
+        const val MAIN_TYPE = 88005
+    }
     var groupView: ConstraintLayout = itemView.findViewById(R.id.mainItemGroup)
     var posterImage: ImageView = itemView.findViewById(R.id.posterImage)
     private var genres: TextView = itemView.findViewById(R.id.genresKeywordsText)

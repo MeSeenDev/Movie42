@@ -1,15 +1,16 @@
 package ru.meseen.dev.androidacademy.data.repositories.impl
 
 import android.app.Application
-import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
-import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.data.MovieRemoteMediator
 import ru.meseen.dev.androidacademy.data.SearchRemoteMediator
 import ru.meseen.dev.androidacademy.data.base.App
@@ -22,6 +23,7 @@ import ru.meseen.dev.androidacademy.data.base.entity.relations.MovieItemEntity
 import ru.meseen.dev.androidacademy.data.base.query.MovieByIdQuery
 import ru.meseen.dev.androidacademy.data.base.query.MovieListableQuery
 import ru.meseen.dev.androidacademy.data.base.query.MovieSearchQuery
+import ru.meseen.dev.androidacademy.data.repositories.AllMoviesListsRepository
 import ru.meseen.dev.androidacademy.data.repositories.MovieItemRepository
 import ru.meseen.dev.androidacademy.data.repositories.MovieListRepository
 import ru.meseen.dev.androidacademy.data.repositories.SearchRepository
@@ -30,7 +32,7 @@ import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient
 
 @ExperimentalSerializationApi
 class Repository(application: Application, val dataBase: RoomDataBase) :
-    MovieListRepository, MovieItemRepository, SearchRepository {
+    MovieListRepository, MovieItemRepository, SearchRepository, AllMoviesListsRepository {
 
     private val mainScope = (application as App).applicationScope
 
@@ -46,10 +48,6 @@ class Repository(application: Application, val dataBase: RoomDataBase) :
             dataBase.movieDao().insertAll(*genresEntity.toTypedArray())
         }
     }
-
-
-
-
 
     private val movieID: MutableLiveData<MovieItemEntity> = MutableLiveData()
 
@@ -85,18 +83,18 @@ class Repository(application: Application, val dataBase: RoomDataBase) :
                     language
                 )
             }
-        val genresItem = service.getGenresList(language).genres.map { GenresEntity(it, language) }
+        val genresItem =
+            movieResponse.genres.map { GenresEntity(it.genresId, it.genresName, language) }
         return MovieItemEntity(
             movieAddData = movieItem,
             castList = casts,
             genresEntity = genresItem
         )
     }
+
     override fun clearMovieItem() {
         movieID.value = null
     }
-
-
 
 
     @ExperimentalPagingApi
@@ -121,28 +119,10 @@ class Repository(application: Application, val dataBase: RoomDataBase) :
         dataBase.movieDao().getMovieList(query.getMoviePath())
     }.flow
 
-    override suspend fun clearSearchBDQuery(listType: String) = dataBase.movieDao().clearSearchBDQuery(listType)
+    override suspend fun clearSearchBDQuery(listType: String) =
+        dataBase.movieDao().clearSearchBDQuery(listType)
+
+    override fun getAllMovies(): List<MovieDataEntity> = dataBase.movieDao().getAllMoviesListsRepository()
 
 
-
-    enum class ListType(val selection: String) {
-
-
-        TOP_VIEW_LIST("top_rated"), NOW_PLAYING_VIEW__LIST("now_playing")
-        , POPULAR_VIEW_LIST("popular"), UPCOMING_VIEW_LIST("upcoming"),SEARCH_VIEW_LIST("movie");
-
-        fun getLocalizedName(resources: Resources): String {
-            return when (selection) {
-                "top_rated" -> resources.getString(R.string.top_rated)
-                "now_playing" -> resources.getString(R.string.now_playing)
-                "popular" -> resources.getString(R.string.popular)
-                "upcoming" -> resources.getString(R.string.upcoming)
-                "movie" ->resources.getString(R.string.movie_search)
-                else -> {
-                    throw IllegalArgumentException("No such Type Exists")
-                }
-            }
-        }
-
-    }
 }

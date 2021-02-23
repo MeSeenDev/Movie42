@@ -109,6 +109,9 @@ interface MovieListableDao {
     @Query("SELECT * FROM MOVIE_TABLE  WHERE listType LIKE :listType")
     fun getTestsList(listType: String): List<MovieDataEntity>
 
+    @Query("SELECT * FROM MOVIE_TABLE")
+    fun getAllMoviesListsRepository(): List<MovieDataEntity>
+
 
     @Query("DELETE FROM MOVIE_TABLE")
     suspend fun clearMovieLists()

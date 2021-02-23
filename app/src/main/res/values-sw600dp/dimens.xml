@@ -8,4 +8,6 @@
     <dimen name="main_item_margins">8dp</dimen>
     <dimen name="main_item_recycle_view_padding_start">24dp</dimen>
     <dimen name="main_item_recycle_view_padding_end">24dp</dimen>
+
+
 </resources>

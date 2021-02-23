@@ -1,8 +1,6 @@
 package ru.meseen.dev.androidacademy.data.retrofit
 
-import androidx.lifecycle.liveData
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -11,7 +9,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import ru.meseen.dev.androidacademy.data.retrofit.service.ConfigurationResponse
 import ru.meseen.dev.androidacademy.data.retrofit.service.MovieService
 import java.util.concurrent.TimeUnit
 
