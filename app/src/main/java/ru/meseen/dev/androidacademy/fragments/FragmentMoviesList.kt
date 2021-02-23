@@ -1,13 +1,15 @@
 package ru.meseen.dev.androidacademy.fragments
 
 import android.app.Application
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.activityViewModels
@@ -18,6 +20,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -26,18 +30,23 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.adapters.MovieClickListener
 import ru.meseen.dev.androidacademy.adapters.PagingPageAdapter
-import ru.meseen.dev.androidacademy.data.repositories.impl.Repository.ListType
-import ru.meseen.dev.androidacademy.data.repositories.impl.Repository.ListType.*
+import ru.meseen.dev.androidacademy.adapters.loaderStates.FooterLoadStateAdapter
+import ru.meseen.dev.androidacademy.adapters.loaderStates.HeaderLoadStateAdapter
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModel
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModelFactory
 import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_DETAILS_TAG
 import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_LIST_TAG
+import ru.meseen.dev.androidacademy.support.ListType
+import ru.meseen.dev.androidacademy.support.ListType.*
+
+
 
 class FragmentMoviesList : Fragment(), MovieClickListener {
 
     companion object {
 
         private const val KEY_TOOLBAR_TITLE = "KEY_TOOLBAR_TITLE"
+        private const val TAG = "FragmentMoviesList"
         fun getInstance(
             application: Application
         ): Fragment {
@@ -56,8 +65,12 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
 
     private lateinit var application: Application
     private lateinit var toolbar: Toolbar
+
+
     private var listType: ListType? = TOP_VIEW_LIST
-    private lateinit var adapter : PagingPageAdapter
+    private lateinit var adapter: PagingPageAdapter
+    private lateinit var footerAdapter: FooterLoadStateAdapter
+    private lateinit var headerAdapter: HeaderLoadStateAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,14 +81,17 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
                     KEY_TOOLBAR_TITLE
                 ) as ListType?
         }
+        @Suppress("DEPRECATION")
         retainInstance = true
 
     }
+
 
     private fun setToolbarTitle(listType: ListType) {
         this.listType = listType
         toolbar.title = listType.getLocalizedName(resources)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,27 +105,28 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         return view
     }
 
+    var quantity: Int = 2
 
     @ExperimentalSerializationApi
     @ExperimentalPagingApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycleMain)
-
-        adapter = PagingPageAdapter( listener = this)
+        quantity =
+            view.resources.getInteger(R.integer.main_item_card_span) //todo возможно сделать глобальной
+        adapter = PagingPageAdapter(listener = this)
         val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        val gridLayoutManager: RecyclerView.LayoutManager
         val bottomNavView: BottomNavigationView = view.findViewById(R.id.bottom_navigation)
         bottomNavView.setOnNavigationItemSelectedListener(navigationListener)
         recyclerView.setHasFixedSize(true)
+
+
+        footerAdapter = FooterLoadStateAdapter(adapter) // ws 11
+        headerAdapter = HeaderLoadStateAdapter(adapter) // ws 11
         recyclerView.adapter = adapter
-        // Временное решение
-        val quantity =
-            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
-        gridLayoutManager = GridLayoutManager(application.baseContext, quantity)
+        val gridLayoutManager = GridLayoutManager(view.context, quantity)
         gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
-
-
+        gridLayoutManager.spanSizeLookup = spanSizeLookup
 
         recyclerView.layoutManager = gridLayoutManager
 
@@ -124,7 +141,7 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         lifecycleScope.launchWhenCreated {
             viewModel.movies.collectLatest {
                 adapter.submitData(it)
-                Log.d("TAG", "onViewCreated: $it")
+                Log.d(TAG, "onViewCreated: $it")
             }
         }
 
@@ -135,21 +152,55 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
                 .collect { recyclerView.scrollToPosition(0) } ///Обновляшка и сбрасовашка
         }
 
+        // отслеживание состояний и вывод предупреждений, не особо удобно для обработки ошибок сети будут LoadStateAdapters
+        lifecycleScope.launchWhenCreated {
+            adapter.addLoadStateListener {
+                val temp = it.append
+                val snackbar = Snackbar.make(view, "$temp", LENGTH_LONG)
+                if (temp is LoadState.Error) {
+                    val text = temp.error.message
+                    snackbar.setBackgroundTint(
+                        ResourcesCompat.getColor(
+                            view.resources,
+                            R.color.colorAccent,
+                            null
+                        )
+                    ).show()
+                }
+            }
+        }
+
     }
 
-    @ExperimentalSerializationApi
+
+    private val spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+        override fun getSpanSize(position: Int): Int {
+            return if (position == 0 && headerAdapter.itemCount > 0) {
+                // если первая позичия и отображается хеадер
+                quantity
+            } else if (position == adapter.itemCount && footerAdapter.itemCount > 0) {
+                // если крайняя позичия и отображается футер
+                Log.d(TAG, "GridLayoutManager: ${adapter.itemCount}")
+                quantity
+            } else {
+                1
+            }
+        }
+    }
+
+
     private val navigationListener = BottomNavigationView.OnNavigationItemSelectedListener {
 
 
         when (it.itemId) {
             R.id.nav_top_rated -> {
-                viewModel.switchTypeList(TOP_VIEW_LIST)
-                setToolbarTitle(TOP_VIEW_LIST)
+                viewModel.switchTypeList(ListType.TOP_VIEW_LIST)
+                setToolbarTitle(ListType.TOP_VIEW_LIST)
                 true
             }
             R.id.nav_now_playing -> {
-                viewModel.switchTypeList(NOW_PLAYING_VIEW__LIST)
-                setToolbarTitle(NOW_PLAYING_VIEW__LIST)
+                viewModel.switchTypeList(NOW_PLAYING_VIEW_LIST)
+                setToolbarTitle(NOW_PLAYING_VIEW_LIST)
                 true
             }
             R.id.nav_favorite -> {
@@ -177,7 +228,11 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         val fragmentManager = parentFragmentManager.beginTransaction()
         fragmentManager.replace(
             R.id.activity_main_frame,
-            FragmentMoviesDetails.getInstance(application = application, movieID = movieID, MOVIE_LIST_TAG),
+            FragmentMoviesDetails.getInstance(
+                application = application,
+                movieID = movieID,
+                MOVIE_LIST_TAG
+            ),
             MOVIE_DETAILS_TAG.toString()
         ).addToBackStack(MOVIE_LIST_TAG.toString())
             .setTransition(TRANSIT_FRAGMENT_OPEN)

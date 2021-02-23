@@ -6,10 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.work.ListenableWorker
 import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.workDataOf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.assertEquals
@@ -23,6 +20,7 @@ import ru.meseen.dev.androidacademy.data.base.entity.MovieDataEntity
 import ru.meseen.dev.androidacademy.data.repositories.impl.Repository
 import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieItemResponse
+import ru.meseen.dev.androidacademy.support.ListType.*
 import ru.meseen.dev.androidacademy.workers.BaseRefreshWorker
 
 
@@ -31,15 +29,19 @@ class WorkerTest {
 
     private lateinit var context: Context
     private lateinit var application: App
+    @ExperimentalSerializationApi
     private val service = RetrofitClient.movieService
-    private val mainScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     @ExperimentalSerializationApi
     private lateinit var repository: Repository
 
     companion object {
-        const val TAG = "WorkerTestFifa"
+        private const val TAG = "WorkerTestFifa"
+        private const val LANGUAGE = "ru-RU"
+        private const val REGION = "RU"
+        private const val PAGE = 1
     }
+
 
     @ExperimentalSerializationApi
     @Before
@@ -57,45 +59,62 @@ class WorkerTest {
                 .build()
         val cor = worker.startWork()
         val result = cor.get()
-        val data = workDataOf("Strins" to "BaseRefreshWorker  doWork: ")
+        val data = workDataOf("Success" to "PASS")
         assertThat(result, `is`(ListenableWorker.Result.success(data)))
     }
 
     @ExperimentalSerializationApi
     @Test
     fun dataEquals() {
-        mainScope.launch(Dispatchers.IO) {
-
-            val genresItems = service.getGenresList("ru-RU")
+        runBlocking {
+            val genresItems = service.getGenresList(LANGUAGE)
             val genres =
                 genresItems.genres.map { it.genresId to it.genresName }.toMap()
 
-            val topRated = service.loadList("top_rated", "ru-RU", 1, "RU").results.transform(
-                "top_rated",
+            val topRated = service.loadList(
+                TOP_VIEW_LIST.selection,
+                LANGUAGE,
+                PAGE,
+                REGION
+            ).results.transform(
+                TOP_VIEW_LIST.selection,
                 genres
             )
-            val nowPlaying = service.loadList("now_playing", "ru-RU", 1, "RU").results.transform(
-                "now_playing",
+            val nowPlaying = service.loadList(
+                NOW_PLAYING_VIEW_LIST.selection,
+                LANGUAGE,
+                PAGE,
+                REGION
+            ).results.transform(
+                NOW_PLAYING_VIEW_LIST.selection,
                 genres
             )
-            val popular = service.loadList("popular", "ru-RU", 1, "RU").results.transform(
-                "popular",
-                genres
-            )
-            val upcoming = service.loadList("upcoming", "ru-RU", 1, "RU").results.transform(
-                "upcoming",
-                genres
-            )
+            val popular =
+                service.loadList(
+                    POPULAR_VIEW_LIST.selection,
+                    LANGUAGE,
+                    PAGE,
+                    REGION
+                ).results.transform(
+                    POPULAR_VIEW_LIST.selection,
+                    genres
+                )
+            val upcoming =
+                service.loadList(
+                    UPCOMING_VIEW_LIST.selection,
+                    LANGUAGE,
+                    PAGE,
+                    REGION
+                ).results.transform(
+                    UPCOMING_VIEW_LIST.selection,
+                    genres
+                )
 
             val topRatedBD = repository.dataBase.movieDao().getTestsList("top_rated")
             val nowPlayingBD = repository.dataBase.movieDao().getTestsList("now_playing")
             val popularBD = repository.dataBase.movieDao().getTestsList("popular")
             val upcomingBD = repository.dataBase.movieDao().getTestsList("upcoming")
 
-            Log.wtf(TAG, "testMyWork:topRated equals = ${topRated[0] == topRatedBD[0]}")
-            Log.wtf(TAG, "testMyWork:nowPlaying equals = ${nowPlaying[0] == nowPlayingBD[0]}")
-            Log.wtf(TAG, "testMyWork:popular equals = ${popular[0] == popularBD[0]}")
-            Log.wtf(TAG, "testMyWork:upcoming equals = ${upcoming[0] == upcomingBD[0]}")
 
             assertEquals(topRated, topRatedBD)
             Log.d(TAG, "testMyWork: top_rated")
@@ -105,7 +124,6 @@ class WorkerTest {
             Log.d(TAG, "testMyWork: popular")
             assertEquals(upcoming, upcomingBD)
             Log.d(TAG, "testMyWork: upcoming")
-
 
         }
     }
@@ -119,7 +137,7 @@ class WorkerTest {
             MovieDataEntity(
                 movieItem,
                 path,
-                movieItem.genreIds.map { genres[it] }.joinToString()
+                movieItem.genreIds.map { genres[it]?.capitalize() }.joinToString()
             )
         }
 

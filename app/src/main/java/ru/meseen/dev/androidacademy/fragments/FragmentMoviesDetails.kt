@@ -59,6 +59,7 @@ class FragmentMoviesDetails : BottomSheetDialogFragment() {
 
     }
 
+    @Suppress("DEPRECATION")// киборги.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
@@ -75,14 +76,10 @@ class FragmentMoviesDetails : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-      val view =  inflater.inflate(R.layout.fragment_movies_details, container, false)
-
+        val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
         val windowHeight: Int =
             view.context.resources.displayMetrics.heightPixels
-
         val parentSheet = view.findViewById<NestedScrollView>(R.id.parentDetails)
-
         val layoutParams = parentSheet.layoutParams
 
         layoutParams.height = windowHeight
@@ -95,19 +92,16 @@ class FragmentMoviesDetails : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolBarImage = view.findViewById(R.id.app_bar_image)
-
-
-
-
-
         toolBarImage.background = null
         navBack = view.findViewById(R.id.home)
         navBack.setOnClickListener {
-            if (parentFragmentsTag == FragmentsTags.SEARCH_VIEW_TAG.toString()) dismiss()
+
             parentFragmentManager.popBackStack(
                 parentFragmentsTag,
                 POP_BACK_STACK_INCLUSIVE
             )
+            dismiss()
+
         }
         val recyclerView = view.findViewById<RecyclerView>(R.id.detailRecycleView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
