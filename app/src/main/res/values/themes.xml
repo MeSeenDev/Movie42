@@ -14,7 +14,6 @@
         <item name="bottomSheetDialogTheme">@style/mBottomSheetDialogTheme</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-
         <item name="toolbarStyle">@style/MainToolbar</item>
     </style>
     <!-- Customize your theme here. -->
@@ -209,10 +208,30 @@
 
     <style name="mBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
-
         <item name="behavior_peekHeight">1500dp</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="PreferenceScreen" parent="Theme.Movie42">
+        <item name="colorAccent">@color/colorAccent</item> <!-- PrefsCategory цвет текста -->
+        <item name="android:textColor">@color/white</item> <!-- Цвет текста Preference -->
+        <item name="android:textColorSecondary">@color/label_text</item> <!--  Цвет Summary -->
+        <item name="alertDialogTheme">@style/AlertDialogStyle</item>
+    </style>
+
+    <style name="AlertDialogStyle" parent="Theme.MaterialComponents.DayNight.Dialog.Alert.Bridge">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/label_text</item> <!-- красит не чекнутые  радиобатоны -->
+        <item name="android:background">@color/background</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="textColorAlertDialogListItem">@color/white</item> <!-- красит текст итемов радиобатоны -->
+
 
 
     </style>
+
 
 </resources>

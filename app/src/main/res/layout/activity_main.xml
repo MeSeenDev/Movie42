@@ -5,6 +5,8 @@
     android:id="@+id/activity_main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionGroup="true"
+    android:transitionName="Main_key"
     android:background="@color/background" />
 
 

@@ -24,8 +24,6 @@
     <string name="reviews">REVIEWS</string>
 
 
-
-
     <string name="top_rated">Top Rated</string>
     <string name="now_playing">Now Playing</string>
     <string name="popular">Popular</string>
@@ -36,10 +34,21 @@
     <string name="channel_new_movie_description">notify when new movie found in tops</string>
     <string name="notification_new_movie">New movie in top: </string>
     <string name="notification_add_to_calendar">Add to Calendar</string>
+    <string name="main_item_transition">main_item_transition</string>
 
 
+    <string name="movie_anim_transition_name">go_fuck_your_self_</string>
+    <string name="details_transition">detailsTransition</string>
+    <string name="movies_list_fragment">movies_list_fragment</string>
+    <string name="settings">Settings</string>
+    <string name="prefs_category_localization">Localization</string>
+    <string name="prefs_data_language">Data Language</string>
+    <string name="prefs_data_regions">Regions</string>
+    <string name="prefs_pick_data_language">Pick data language</string>
+    <string name="prefs_pick_region">Pick Region</string>
+    <string name="connection_observer_restored">Connection restored</string>
+    <string name="connection_observer_lost">Lost internet connection</string>
+    <string name="movies_list_auto_update">Movies List Auto Update</string>
 
-    <!--TOP_VIEW_LIST("top_rated"), NOW_PLAYING_VIEW__LIST("now_playing")
-        , POPULAR_VIEW_LIST("popular"), UPCOMING_VIEW_LIST("upcoming")-->
 
 </resources>

@@ -6,16 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.activityViewModels
+import androidx.paging.ExperimentalPagingApi
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.adapters.MovieDetailAdapter
 import ru.meseen.dev.androidacademy.data.base.query.impl.MovieItemQuery
@@ -23,8 +28,10 @@ import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieDetailsViewModel
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModelFactory
 import ru.meseen.dev.androidacademy.support.FragmentsTags
+import ru.meseen.dev.androidacademy.support.PreferencesKeys
 
-
+@ExperimentalPagingApi
+@ExperimentalSerializationApi
 class FragmentMoviesDetails : BottomSheetDialogFragment() {
 
     private lateinit var navBack: MaterialTextView
@@ -85,31 +92,37 @@ class FragmentMoviesDetails : BottomSheetDialogFragment() {
         layoutParams.height = windowHeight
         parentSheet.layoutParams = layoutParams
 
+        ViewCompat.setTransitionName(view, view.resources.getString(R.string.details_transition))
+
         return view
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backCallback
+        )
         toolBarImage = view.findViewById(R.id.app_bar_image)
         toolBarImage.background = null
         navBack = view.findViewById(R.id.home)
         navBack.setOnClickListener {
-
-            parentFragmentManager.popBackStack(
-                parentFragmentsTag,
-                POP_BACK_STACK_INCLUSIVE
-            )
-            dismiss()
-
+            backCallback.handleOnBackPressed()
         }
         val recyclerView = view.findViewById<RecyclerView>(R.id.detailRecycleView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
         adapter = MovieDetailAdapter()
         recyclerView.adapter = adapter
+
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application)
+        val languageQuery = sharedPrefs.getString(
+            PreferencesKeys.LANGUAGE_KEY.key,
+            PreferencesKeys.LANGUAGE_KEY.defaultKey) ?: PreferencesKeys.LANGUAGE_KEY.defaultKey
+
         viewModel.loadMovieItem(
             MovieItemQuery(
-                movieID, language = "ru-RU"
+                movieID, language = languageQuery
             )
         ).observe(viewLifecycleOwner) { item ->
             item?.let {
@@ -117,7 +130,6 @@ class FragmentMoviesDetails : BottomSheetDialogFragment() {
                 setBackImage(RetrofitClient.getImageUrl(it.movieAddData.backdropPath))
             }
         }
-
     }
 
 
@@ -133,8 +145,24 @@ class FragmentMoviesDetails : BottomSheetDialogFragment() {
         }
     }
 
+
+    private val backCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (parentFragmentsTag == FragmentsTags.MOVIE_LIST_TAG.toString()) {
+                parentFragmentManager.popBackStack(
+                    parentFragmentsTag,
+                    POP_BACK_STACK_INCLUSIVE
+                )
+            } else {
+                dismiss()
+            }
+        }
+    }
+
     override fun onDestroyView() {
         viewModel.clear()
         super.onDestroyView()
     }
+
+
 }

@@ -1,7 +1,10 @@
 package ru.meseen.dev.androidacademy.data.base
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.util.Log
+import androidx.paging.ExperimentalPagingApi
+import androidx.preference.PreferenceManager
 import androidx.work.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -22,9 +25,13 @@ class App : Application() {
         }
     val applicationScope = CoroutineScope(SupervisorJob() + coroutineExceptionHandler)
     private val dataBase by lazy { RoomDataBase.getDatabase(this) }
-    @ExperimentalSerializationApi
+
+    @ExperimentalPagingApi
     val repository by lazy { Repository(this, dataBase) }
 
+
+    @ExperimentalPagingApi
+    @ExperimentalSerializationApi
 
     override fun onCreate() {
         super.onCreate()
@@ -43,6 +50,7 @@ class App : Application() {
 
     }
 
-
+    private val sharedPrefsListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key -> TODO("Not yet implemented") }
 
 }

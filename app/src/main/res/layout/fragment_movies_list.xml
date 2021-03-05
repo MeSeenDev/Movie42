@@ -2,21 +2,49 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:transitionGroup="true"
+    android:transitionName="@string/movies_list_fragment"
     tools:context=".MainActivity"
     tools:ignore="Overdraw">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/status_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="6dp"
+        android:gravity="center"
+        android:paddingStart="@dimen/status_margin"
+        android:paddingEnd="@dimen/status_margin"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="Some network status"
+        android:textColor="@color/label_text"
+        android:textSize="14sp"
+
+        app:drawableStartCompat="@drawable/ic_round_signal_wifi_statusbar_connected_no_internet_4_24" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/movies_list_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="top"
+        android:layout_marginBottom="1dp"
         android:minHeight="?attr/actionBarSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/main_menu"
         app:navigationIcon="@drawable/ic_combined_shape"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"

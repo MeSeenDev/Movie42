@@ -1,27 +1,36 @@
 package ru.meseen.dev.androidacademy.fragments
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator.RESTART
 import android.app.Application
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textview.MaterialTextView
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -31,16 +40,22 @@ import ru.meseen.dev.androidacademy.R
 import ru.meseen.dev.androidacademy.adapters.MovieClickListener
 import ru.meseen.dev.androidacademy.adapters.PagingPageAdapter
 import ru.meseen.dev.androidacademy.adapters.loaderStates.FooterLoadStateAdapter
-import ru.meseen.dev.androidacademy.adapters.loaderStates.HeaderLoadStateAdapter
+import ru.meseen.dev.androidacademy.data.retrofit.Banner
+import ru.meseen.dev.androidacademy.data.retrofit.ConnectionObserver
+import ru.meseen.dev.androidacademy.data.retrofit.ConnectionState
+import ru.meseen.dev.androidacademy.data.retrofit.MaterialTextBanner
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModel
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModelFactory
 import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_DETAILS_TAG
 import ru.meseen.dev.androidacademy.support.FragmentsTags.MOVIE_LIST_TAG
 import ru.meseen.dev.androidacademy.support.ListType
 import ru.meseen.dev.androidacademy.support.ListType.*
+import ru.meseen.dev.androidacademy.support.PreferencesKeys.LANGUAGE_KEY
+import ru.meseen.dev.androidacademy.support.PreferencesKeys.REGION_KEY
 
 
-
+@ExperimentalSerializationApi
+@ExperimentalPagingApi
 class FragmentMoviesList : Fragment(), MovieClickListener {
 
     companion object {
@@ -70,7 +85,10 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
     private var listType: ListType? = TOP_VIEW_LIST
     private lateinit var adapter: PagingPageAdapter
     private lateinit var footerAdapter: FooterLoadStateAdapter
-    private lateinit var headerAdapter: HeaderLoadStateAdapter
+    private lateinit var bottomNavView: BottomNavigationView
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var patentLayout: CoordinatorLayout
+    private lateinit var statusTextView: MaterialTextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,6 +101,16 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         }
         @Suppress("DEPRECATION")
         retainInstance = true
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application).apply {
+            registerOnSharedPreferenceChangeListener(prefsChangeListener)
+        }
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 300L
+        }
+
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 300L
+        }
 
     }
 
@@ -99,7 +127,9 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
+        patentLayout = view.findViewById(R.id.list_parent)
         toolbar = view.findViewById(R.id.movies_list_toolbar)
+        statusTextView = view.findViewById(R.id.status_text_view)
         listType?.let { setToolbarTitle(it) }
         (activity as AppCompatActivity?)?.setSupportActionBar(toolbar)
         return view
@@ -107,29 +137,33 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
 
     var quantity: Int = 2
 
-    @ExperimentalSerializationApi
-    @ExperimentalPagingApi
+
+    @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycleMain)
+        recyclerView.setHasFixedSize(true)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
         quantity =
             view.resources.getInteger(R.integer.main_item_card_span) //todo возможно сделать глобальной
         adapter = PagingPageAdapter(listener = this)
-        val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        val bottomNavView: BottomNavigationView = view.findViewById(R.id.bottom_navigation)
-        bottomNavView.setOnNavigationItemSelectedListener(navigationListener)
-        recyclerView.setHasFixedSize(true)
-
-
         footerAdapter = FooterLoadStateAdapter(adapter) // ws 11
-        headerAdapter = HeaderLoadStateAdapter(adapter) // ws 11
-        recyclerView.adapter = adapter
+
+        val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        bottomNavView = view.findViewById(R.id.bottom_navigation)
+
+        bottomNavView.setOnNavigationItemSelectedListener(navigationListener)
+
+
+        recyclerView.adapter = adapter.withLoadStateFooter(footerAdapter)
+
         val gridLayoutManager = GridLayoutManager(view.context, quantity)
         gridLayoutManager.isUsingSpansToEstimateScrollbarDimensions = true
         gridLayoutManager.spanSizeLookup = spanSizeLookup
 
         recyclerView.layoutManager = gridLayoutManager
-
 
         swipeRefreshLayout.setOnRefreshListener { adapter.refresh() }
         lifecycleScope.launchWhenCreated {
@@ -141,7 +175,6 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         lifecycleScope.launchWhenCreated {
             viewModel.movies.collectLatest {
                 adapter.submitData(it)
-                Log.d(TAG, "onViewCreated: $it")
             }
         }
 
@@ -151,36 +184,43 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
                 .filter { it.refresh is LoadState.NotLoading }
                 .collect { recyclerView.scrollToPosition(0) } ///Обновляшка и сбрасовашка
         }
+        val banner = Banner(statusTextView) as MaterialTextBanner
+
+        lifecycleScope.launchWhenStarted {
+            ConnectionObserver(application).observe(viewLifecycleOwner) {
+                banner.submitState(it)
+            }
+
+        }
 
         // отслеживание состояний и вывод предупреждений, не особо удобно для обработки ошибок сети будут LoadStateAdapters
         lifecycleScope.launchWhenCreated {
             adapter.addLoadStateListener {
-                val temp = it.append
-                val snackbar = Snackbar.make(view, "$temp", LENGTH_LONG)
-                if (temp is LoadState.Error) {
-                    val text = temp.error.message
-                    snackbar.setBackgroundTint(
-                        ResourcesCompat.getColor(
-                            view.resources,
-                            R.color.colorAccent,
-                            null
-                        )
-                    ).show()
+                val loadState = it.refresh
+                val loadStateMediator = it.mediator
+                if (loadState is LoadState.Error) {
+                    banner.submitState(
+                        ConnectionState
+                            .Error
+                            .Download(loadState.error.localizedMessage ?: "Unreachable Error"))
+                }
+                if(loadStateMediator?.refresh is LoadState.NotLoading){
+                    banner.submitState(
+                        ConnectionState
+                            .Connected
+                            .Download("Data Updated"))
                 }
             }
         }
+
 
     }
 
 
     private val spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
-            return if (position == 0 && headerAdapter.itemCount > 0) {
-                // если первая позичия и отображается хеадер
-                quantity
-            } else if (position == adapter.itemCount && footerAdapter.itemCount > 0) {
+            return if (position == adapter.itemCount && footerAdapter.itemCount > 0) {
                 // если крайняя позичия и отображается футер
-                Log.d(TAG, "GridLayoutManager: ${adapter.itemCount}")
                 quantity
             } else {
                 1
@@ -190,12 +230,10 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
 
 
     private val navigationListener = BottomNavigationView.OnNavigationItemSelectedListener {
-
-
         when (it.itemId) {
             R.id.nav_top_rated -> {
-                viewModel.switchTypeList(ListType.TOP_VIEW_LIST)
-                setToolbarTitle(ListType.TOP_VIEW_LIST)
+                viewModel.switchTypeList(TOP_VIEW_LIST)
+                setToolbarTitle(TOP_VIEW_LIST)
                 true
             }
             R.id.nav_now_playing -> {
@@ -223,25 +261,71 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         }
     }
 
-    override fun onItemClick(movieID: Int) {
-        Toast.makeText(application, "movieID: $movieID", Toast.LENGTH_SHORT).show()
+    override fun onItemClick(movieID: Int, view: View) {
+        bottomNavView.hide()
         val fragmentManager = parentFragmentManager.beginTransaction()
-        fragmentManager.replace(
-            R.id.activity_main_frame,
-            FragmentMoviesDetails.getInstance(
-                application = application,
-                movieID = movieID,
-                MOVIE_LIST_TAG
-            ),
-            MOVIE_DETAILS_TAG.toString()
-        ).addToBackStack(MOVIE_LIST_TAG.toString())
-            .setTransition(TRANSIT_FRAGMENT_OPEN)
-            .commit()
+        val fragment = FragmentMoviesDetails.getInstance(
+            application = application,
+            movieID = movieID,
+            MOVIE_LIST_TAG
+        )
+
+        fragment.sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.activity_main_frame
+            duration = 300L
+            scrimColor = Color.TRANSPARENT
+            setAllContainerColors(
+                ResourcesCompat.getColor(
+                    application.resources,
+                    R.color.background,
+                    null
+                )
+            )
+        }
+        fragmentManager.apply {
+            addSharedElement(view, application.resources.getString(R.string.details_transition))
+            replace(
+                R.id.activity_main_frame,
+                fragment,
+                MOVIE_DETAILS_TAG.toString()
+            )
+            addToBackStack(MOVIE_LIST_TAG.toString())
+        }.commit()
+    }
+
+    private fun BottomNavigationView.hide() {
+        ObjectAnimator.ofFloat(bottomNavView, View.TRANSLATION_Y, 200f).apply {
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    bottomNavView.visibility = GONE
+                }
+            })
+            interpolator = AccelerateDecelerateInterpolator()
+            duration = 100L
+            repeatCount = 1
+            repeatMode = RESTART
+
+        }.start()
     }
 
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable(KEY_TOOLBAR_TITLE, listType)
+    }
+
+
+    private val prefsChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            key?.let {
+                if (it == LANGUAGE_KEY.key || it == REGION_KEY.key) {
+                    listType?.let { it1 -> viewModel.forceSwitchTypeList(it1) } // Обновление списка на снове новых настроек
+                }
+            }
+        }
+
+    override fun onDestroyView() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
+        super.onDestroyView()
     }
 
 }

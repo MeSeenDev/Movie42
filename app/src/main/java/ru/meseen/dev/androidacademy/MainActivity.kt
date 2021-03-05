@@ -8,14 +8,22 @@ import android.view.MenuItem
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
+import androidx.paging.ExperimentalPagingApi
+import androidx.preference.PreferenceManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.data.base.query.impl.SearchViewQuery
 import ru.meseen.dev.androidacademy.fragments.FragmentMoviesDetails
 import ru.meseen.dev.androidacademy.fragments.FragmentMoviesList
 import ru.meseen.dev.androidacademy.fragments.SearchFragment
+import ru.meseen.dev.androidacademy.fragments.settings.ActivitySettings
+import ru.meseen.dev.androidacademy.fragments.settings.MoviePrefsFragment
 import ru.meseen.dev.androidacademy.support.FragmentsTags
+import ru.meseen.dev.androidacademy.support.PreferencesKeys.*
 import ru.meseen.dev.androidacademy.workers.notifications.Tag
 
+@ExperimentalPagingApi
+@ExperimentalSerializationApi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var searchView: SearchView
@@ -23,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG = "MainActivity"
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             ).commit()
             intent?.let { checkActionIntent(it) }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -46,18 +56,30 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.app_bar_settings) {
+            startActivity(Intent(this@MainActivity ,ActivitySettings::class.java))
+        }
+        return false
+    }
+
     private val textListener = object :
         SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             Log.d(TAG, "onQueryTextSubmit: $query")
+
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
+            val languageForQuery =
+                sharedPreferences.getString(LANGUAGE_KEY.key, LANGUAGE_KEY.defaultKey) ?: LANGUAGE_KEY.defaultKey
+            val regionForQuery = sharedPreferences.getString(REGION_KEY.key, REGION_KEY.defaultKey) ?: REGION_KEY.defaultKey
 
             val redactorBottomSheet = SearchFragment.getInstance(
                 application,
                 SearchViewQuery(
                     path = "movie",
                     query = query ?: "Star",
-                    language = "ru-RU",
-                    region = "RU"
+                    language = languageForQuery,
+                    region = regionForQuery
                 )
             )
             invalidateOptionsMenu()
@@ -81,10 +103,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-            checkActionIntent(intent)
+        checkActionIntent(intent)
 
     }
-    private fun checkActionIntent(intent: Intent?){
+
+    private fun checkActionIntent(intent: Intent?) {
         if (intent != null && intent.action == Intent.ACTION_VIEW) {
             handleIntent(intent)
         }
@@ -98,14 +121,13 @@ class MainActivity : AppCompatActivity() {
             FragmentMoviesDetails.getInstance(
                 application,
                 id,
-                FragmentsTags.MOVIE_LIST_TAG
+                FragmentsTags.INTENT_FROM_WM_VIEW_TAG
             ) as BottomSheetDialogFragment
-        fragment.show(supportFragmentManager, FragmentsTags.MOVIE_DETAILS_TAG.toString())
+        fragment.show(supportFragmentManager, FragmentsTags.INTENT_FROM_WM_VIEW_TAG.toString())
         NotificationManagerCompat.from(applicationContext)
             .cancel(Tag.NEW_MOVIE.toString(), Tag.NEW_MOVIE.uniqueIDN)
 
     }
-
 
 }
 

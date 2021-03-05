@@ -11,6 +11,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -37,7 +38,10 @@ class MovieItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
 
     fun bind(itemMovieData: MovieDataEntity) {
-
+        ViewCompat.setTransitionName(
+            itemView,
+            "${itemView.context.resources.getString(R.string.movie_anim_transition_name)}${itemMovieData.movieId}"
+        )
         genres.text = itemMovieData.genreIds
         runtime.visibility = View.INVISIBLE
 

@@ -10,6 +10,8 @@
     android:layout_marginBottom="@dimen/movie_main_item_parent_margin_bottom"
     tools:ignore="HardcodedText">
 
+    <!-- todo android:transitionName="@string/main_item_transition" -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainItemGroup"
         android:layout_width="match_parent"

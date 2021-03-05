@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.paging.*
+import androidx.preference.PreferenceManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
@@ -21,17 +22,18 @@ import ru.meseen.dev.androidacademy.data.base.query.impl.MovieListQuery
 import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient
 import ru.meseen.dev.androidacademy.support.ListType
 import ru.meseen.dev.androidacademy.support.ListType.*
+import ru.meseen.dev.androidacademy.support.PreferencesKeys
 import ru.meseen.dev.androidacademy.workers.notifications.Notifiable
 import ru.meseen.dev.androidacademy.workers.notifications.NotifyNewMovie
-
+@ExperimentalSerializationApi
+@ExperimentalPagingApi
 class BaseRefreshWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
     companion object {
         private const val TAG = "BaseRefreshWorker"
     }
 
-    @ExperimentalPagingApi
-    @ExperimentalSerializationApi
+
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         return@withContext try {
 
@@ -39,7 +41,7 @@ class BaseRefreshWorker(context: Context, params: WorkerParameters) :
             val dataBase = repository.dataBase
 
             val moviesBefore = repository.getAllMovies()
-            //for test
+
             //moviesBefore = repository.getAllMovies().subList(1, moviesBefore.size) // todo для тестов ставляю два
 
             ListType.values().forEach {
@@ -66,6 +68,7 @@ class BaseRefreshWorker(context: Context, params: WorkerParameters) :
     }
 
 
+
     private fun movieNotify(notifiable: Notifiable) {
         Glide.with(applicationContext)
             .asBitmap()
@@ -90,13 +93,17 @@ class BaseRefreshWorker(context: Context, params: WorkerParameters) :
     @ExperimentalSerializationApi
     @ExperimentalPagingApi
     private suspend fun updateMainLists(dataBase: RoomDataBase, path: String) {
-
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val languageQuery = sharedPrefs.getString(
+            PreferencesKeys.LANGUAGE_KEY.key,
+            PreferencesKeys.LANGUAGE_KEY.defaultKey) ?: PreferencesKeys.LANGUAGE_KEY.defaultKey
+        val regionQuery = sharedPrefs.getString(PreferencesKeys.REGION_KEY.key,PreferencesKeys.REGION_KEY.defaultKey) ?: PreferencesKeys.REGION_KEY.defaultKey
         val listMediator = MovieRemoteMediator(
             query = MovieListQuery(
                 path = path,
                 page = 1,
-                region = "RU",
-                language = "ru-RU"
+                region = regionQuery,
+                language = languageQuery
             ), RetrofitClient.movieService, dataBase
         )
         listMediator.load(

@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -35,7 +36,10 @@ import ru.meseen.dev.androidacademy.fragments.viewmodel.SearchViewModel
 import ru.meseen.dev.androidacademy.fragments.viewmodel.SearchViewModel.Companion.KEY_SEARCH_MOVIES
 import ru.meseen.dev.androidacademy.support.FragmentsTags
 import ru.meseen.dev.androidacademy.support.ListType.*
+import ru.meseen.dev.androidacademy.support.PreferencesKeys
 
+@ExperimentalPagingApi
+@ExperimentalSerializationApi
 class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
 
     private lateinit var searchQuery: SearchQuery
@@ -106,6 +110,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
     }
 
 
+    @ExperimentalStdlibApi
     @ExperimentalSerializationApi
     @ExperimentalPagingApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -150,6 +155,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
 
     }
 
+    @ExperimentalStdlibApi
     @ExperimentalSerializationApi
     @ExperimentalPagingApi
     private fun searchConfig(searchView: SearchView) {
@@ -160,12 +166,18 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         searchView.setOnQueryTextListener(onQueryListener)
     }
 
+    @ExperimentalStdlibApi
     @ExperimentalSerializationApi
     private val onQueryListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+            val languageForQuery =
+                sharedPreferences.getString(PreferencesKeys.LANGUAGE_KEY.key, PreferencesKeys.LANGUAGE_KEY.defaultKey) ?: PreferencesKeys.LANGUAGE_KEY.defaultKey
+            val regionForQuery = sharedPreferences.getString(PreferencesKeys.REGION_KEY.key, PreferencesKeys.REGION_KEY.defaultKey) ?: PreferencesKeys.REGION_KEY.defaultKey
+
             viewModel.reQuery(
                 SearchViewQuery(
-                    query = query as String, language = "ru-RU", region = "RU",
+                    query = query as String, language = languageForQuery, region = "${languageForQuery.lowercase()}-$regionForQuery",
                     path = SEARCH_VIEW_LIST.selection
                 )
             )
@@ -182,7 +194,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
     }
 
 
-    override fun onItemClick(movieID: Int) {
+    override fun onItemClick(movieID: Int,view: View) {
         Toast.makeText(application, "movieID: $movieID", Toast.LENGTH_SHORT).show()
         val frag: BottomSheetDialogFragment = FragmentMoviesDetails.getInstance(
             application = application,
@@ -191,6 +203,11 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         ) as BottomSheetDialogFragment
         frag.show(childFragmentManager, FragmentsTags.MOVIE_DETAILS_TAG.toString())
 
+    }
+
+    override fun onDestroyView() {
+        viewModel.clearSearchResults()
+        super.onDestroyView()
     }
 
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="tool_bar_height">56dp</dimen>
     <dimen name="app_bar_height">280dp</dimen>
     <dimen name="card_maxWidth">170dp</dimen>
     <dimen name="cast_image_width">80dp</dimen>
@@ -15,7 +16,7 @@
     <dimen name="movie_details_recycle_view_padding_bottom">80dp</dimen>
     <dimen name="movie_details_guideline_top">190dp</dimen>
     <dimen name="movie_details_guideline_bottom">290dp</dimen>
-    <dimen name="movie_main_item_parent_margin_bottom">16dp</dimen>
+    <dimen name="movie_main_item_parent_margin_bottom">8dp</dimen>
     <dimen name="movie_main_item_card_corner_radius">8dp</dimen>
     <dimen name="movie_main_item_card_stroke_width">2dp</dimen>
     <dimen name="movie_main_item_keywordtext_size">8sp</dimen>
@@ -34,6 +35,10 @@
     <dimen name="main_item_recycle_view_padding_end">8dp</dimen>
     <dimen name="movie_main_item_parent_margin_start">4dp</dimen>
     <dimen name="movie_main_item_parent_margin_end">4dp</dimen>
+
+
+    <dimen name="status_margin">8dp</dimen>
+    <dimen name="status_height">32dp</dimen>
 
 
 

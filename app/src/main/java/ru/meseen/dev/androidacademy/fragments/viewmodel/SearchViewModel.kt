@@ -37,9 +37,6 @@ class SearchViewModel(
             Log.d(TAG, ": query contains")
 
         }
-        Log.d(TAG, ": query ${handle.get<MovieSearchQuery>(KEY_SEARCH_MOVIES)}")
-        Log.d(TAG, ": query ${!handle.contains(KEY_SEARCH_MOVIES)}")
-
     }
 
     private val clearListCh = Channel<Unit>(Channel.CONFLATED)

@@ -5,17 +5,19 @@ import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.paging.ExperimentalPagingApi
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.data.base.App
-
+@ExperimentalPagingApi
+@ExperimentalSerializationApi
 class MovieViewModelFactory(
     owner: SavedStateRegistryOwner,
     private val application: Application,
     args: Bundle? = null
 ) :
     AbstractSavedStateViewModelFactory(owner, args) {
-    @ExperimentalSerializationApi
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(
         key: String,

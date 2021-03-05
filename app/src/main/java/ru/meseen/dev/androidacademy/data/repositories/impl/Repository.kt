@@ -7,6 +7,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -28,11 +30,15 @@ import ru.meseen.dev.androidacademy.data.repositories.MovieItemRepository
 import ru.meseen.dev.androidacademy.data.repositories.MovieListRepository
 import ru.meseen.dev.androidacademy.data.repositories.SearchRepository
 import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient
+import ru.meseen.dev.androidacademy.support.PreferencesKeys
 
 
 @ExperimentalSerializationApi
-class Repository(application: Application, val dataBase: RoomDataBase) :
+@ExperimentalPagingApi
+
+class Repository(val application: Application, val dataBase: RoomDataBase) :
     MovieListRepository, MovieItemRepository, SearchRepository, AllMoviesListsRepository {
+
 
     private val mainScope = (application as App).applicationScope
 
@@ -41,10 +47,15 @@ class Repository(application: Application, val dataBase: RoomDataBase) :
     private val service = RetrofitClient.movieService
 
     init {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application)
+        val languageQuery = sharedPrefs.getString(
+            PreferencesKeys.LANGUAGE_KEY.toString(),
+            PreferencesKeys.LANGUAGE_KEY.defaultKey) ?: PreferencesKeys.LANGUAGE_KEY.defaultKey
+
         mainScope.launch(Dispatchers.IO) {
-            val genresItems = service.getGenresList("ru-RU")
+            val genresItems = service.getGenresList(languageQuery)
             val genresEntity =
-                genresItems.genres.map { GenresEntity(genresItems = it, language = "ru-RU") }
+                genresItems.genres.map { GenresEntity(genresItems = it, language = languageQuery) }
             dataBase.movieDao().insertAll(*genresEntity.toTypedArray())
         }
     }
@@ -123,6 +134,10 @@ class Repository(application: Application, val dataBase: RoomDataBase) :
         dataBase.movieDao().clearSearchBDQuery(listType)
 
     override fun getAllMovies(): List<MovieDataEntity> = dataBase.movieDao().getAllMoviesListsRepository()
+
+
+
+
 
 
 }

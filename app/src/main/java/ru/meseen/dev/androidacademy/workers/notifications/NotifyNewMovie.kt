@@ -12,9 +12,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH
 import androidx.core.net.toUri
+import androidx.paging.ExperimentalPagingApi
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.MainActivity
 import ru.meseen.dev.androidacademy.R
-
+@ExperimentalPagingApi
+@ExperimentalSerializationApi
 class NotifyNewMovie(
     context: Context,
     private val notifiable: Notifiable,
@@ -28,6 +31,7 @@ class NotifyNewMovie(
 
     private val timeStamp = System.currentTimeMillis()
     private val contentUri = "https://www.themoviedb.org/movie/${notifiable.movieId}".toUri()
+
 
     private val pendingIntent = PendingIntent.getActivities(
         context,

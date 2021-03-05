@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <PreferenceCategory android:title="@string/prefs_category_localization"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <ListPreference
+        android:defaultValue="135"
+        android:entries="@array/language_names"
+        android:entryValues="@array/language_values"
+        android:key="language_preference"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/ic_round_language"
+        android:title="@string/prefs_data_language"
+        android:dialogTitle="@string/prefs_pick_data_language"/>
+    <ListPreference
+        android:defaultValue="181"
+        android:entries="@array/regions_names"
+        android:entryValues="@array/regions_values"
+        android:key="regions_preference"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/ic_round_my_location"
+        android:title="@string/prefs_data_regions"
+        android:dialogTitle="@string/prefs_pick_region"/>
+    <PreferenceCategory android:title="@string/movies_list_auto_update"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+
+    <!-- TODO имплементировать логику-->
+    <ListPreference
+        android:defaultValue="2"
+        android:entries="@array/auto_update_time_names"
+        android:entryValues="@array/auto_update_time_values"
+        android:key="regions_preference"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/ic_round_av_timer_24"
+        android:title="Time Period"
+        android:dialogTitle="Pick Time Period"/>
+
+</PreferenceScreen>

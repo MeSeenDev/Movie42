@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="main_item_card_span">2</integer>
+    <integer name="motion_duration_l">300</integer>
 
 </resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/loadStateMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:lines="3"
+        android:maxLines="3"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/loadStateRetryBtn"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/lorem_keywordstext" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="@+id/loadStateRetryBtn"
+        app:layout_constraintEnd_toEndOf="@+id/loadStateMessage"
+        app:layout_constraintStart_toStartOf="@+id/loadStateMessage"
+        app:layout_constraintTop_toTopOf="@+id/loadStateMessage" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/loadStateRetryBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loadStateMessage" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
