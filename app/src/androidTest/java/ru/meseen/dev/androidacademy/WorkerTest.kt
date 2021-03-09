@@ -2,6 +2,7 @@ package ru.meseen.dev.androidacademy
 
 import android.content.Context
 import android.util.Log
+import androidx.paging.ExperimentalPagingApi
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.ListenableWorker
 import androidx.work.testing.TestListenableWorkerBuilder
@@ -32,6 +33,7 @@ class WorkerTest {
     @ExperimentalSerializationApi
     private val service = RetrofitClient.movieService
 
+    @ExperimentalPagingApi
     @ExperimentalSerializationApi
     private lateinit var repository: Repository
 
@@ -43,6 +45,7 @@ class WorkerTest {
     }
 
 
+    @ExperimentalPagingApi
     @ExperimentalSerializationApi
     @Before
     fun setup() {
@@ -51,6 +54,7 @@ class WorkerTest {
         repository = application.repository
     }
 
+    @ExperimentalPagingApi
     @ExperimentalSerializationApi
     @Test
     fun testMyWorker() {
@@ -63,6 +67,7 @@ class WorkerTest {
         assertThat(result, `is`(ListenableWorker.Result.success(data)))
     }
 
+    @ExperimentalPagingApi
     @ExperimentalSerializationApi
     @Test
     fun dataEquals() {

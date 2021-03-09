@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     tools:showIn="@layout/fragment_movies_details">
 
@@ -121,42 +121,11 @@
         android:layout_marginTop="8dp"
         android:text="@string/descriptionText"
         android:textAppearance="@style/TextStyle"
-        app:layout_constraintBottom_toTopOf="@id/castHeadText"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/storyLineHeadText" />
 
-    <TextView
-        android:id="@+id/castHeadText"
-        style="@style/MovieItem.LineHeadText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/castHeadText"
-        android:textAppearance="@style/TextStyle"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/recycleCast"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleCast"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:overScrollMode="never"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/castHeadText"
-        tools:itemCount="2"
-        tools:listitem="@layout/cast_item" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

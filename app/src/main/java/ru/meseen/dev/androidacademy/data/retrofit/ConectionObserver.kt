@@ -17,7 +17,7 @@ import ru.meseen.dev.androidacademy.R
 
 class ConnectionObserver(private val context: Context) : LiveData<ConnectionState>() {
 
-    private lateinit var networkCallback: ConnectivityManager.NetworkCallback
+    private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
     companion object {
         const val TAG = "ConnectionObserver"
@@ -29,7 +29,10 @@ class ConnectionObserver(private val context: Context) : LiveData<ConnectionStat
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val manager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
             networkCallback = createNetworkCallback()
-            manager.registerDefaultNetworkCallback(networkCallback)
+            networkCallback?.let {
+                manager.registerDefaultNetworkCallback(it)
+            }
+
         } else
             lollipopNetworkAvailableRequest()
 
@@ -106,7 +109,9 @@ class ConnectionObserver(private val context: Context) : LiveData<ConnectionStat
 
     override fun onInactive() {
         val manager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        manager.unregisterNetworkCallback(networkCallback)
+        networkCallback?.let {
+            manager.unregisterNetworkCallback(it)
+        }
     }
 }
 

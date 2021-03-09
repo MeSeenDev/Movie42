@@ -12,6 +12,7 @@ import androidx.work.workDataOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -33,16 +34,19 @@ class BaseRefreshWorker(context: Context, params: WorkerParameters) :
         private const val TAG = "BaseRefreshWorker"
     }
 
+    private val  exceptionScope = CoroutineExceptionHandler { coroutineContext, throwable ->
+        Log.wtf("ERROR", "Worker Exception $coroutineContext : ${throwable.localizedMessage}")
+    }
 
-    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+    override suspend fun doWork(): Result = withContext(exceptionScope + Dispatchers.IO) {
         return@withContext try {
 
             val repository = (applicationContext as App).repository
             val dataBase = repository.dataBase
 
-            val moviesBefore = repository.getAllMovies()
+            var moviesBefore = repository.getAllMovies()
 
-            //moviesBefore = repository.getAllMovies().subList(1, moviesBefore.size) // todo для тестов ставляю два
+          //  moviesBefore = repository.getAllMovies().subList(1, moviesBefore.size) // todo для тестов ставляю два
 
             ListType.values().forEach {
                 if (it != SEARCH_VIEW_LIST) {

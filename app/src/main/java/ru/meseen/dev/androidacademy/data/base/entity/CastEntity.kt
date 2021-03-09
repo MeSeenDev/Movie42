@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.meseen.dev.androidacademy.data.base.RoomDataBase.Companion.CAST_TABLE_NAME
+import ru.meseen.dev.androidacademy.data.base.entity.relations.MovieDetailViewItems
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.CastItem
 
 /**

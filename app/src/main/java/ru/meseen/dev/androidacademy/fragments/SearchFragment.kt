@@ -31,6 +31,9 @@ import ru.meseen.dev.androidacademy.adapters.MovieClickListener
 import ru.meseen.dev.androidacademy.adapters.PagingPageAdapter
 import ru.meseen.dev.androidacademy.data.base.query.SearchQuery
 import ru.meseen.dev.androidacademy.data.base.query.impl.SearchViewQuery
+import ru.meseen.dev.androidacademy.data.retrofit.Banner
+import ru.meseen.dev.androidacademy.data.retrofit.ConnectionObserver
+import ru.meseen.dev.androidacademy.data.retrofit.ConnectionState
 import ru.meseen.dev.androidacademy.fragments.viewmodel.MovieViewModelFactory
 import ru.meseen.dev.androidacademy.fragments.viewmodel.SearchViewModel
 import ru.meseen.dev.androidacademy.fragments.viewmodel.SearchViewModel.Companion.KEY_SEARCH_MOVIES
@@ -44,11 +47,15 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
 
     private lateinit var searchQuery: SearchQuery
     private lateinit var application: Application
+    private lateinit var adapter: PagingPageAdapter
+
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>
     private val viewModel by viewModels<SearchViewModel> {
         val bundle = Bundle()
         arguments?.let { argsBundle ->
+            Log.d(TAG, ": viewModel $argsBundle")
+
             argsBundle.getSerializable(KEY_SEARCH_MOVIES)?.let { queue ->
                 bundle.putSerializable(
                     KEY_SEARCH_MOVIES,
@@ -68,7 +75,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
             val instance = SearchFragment()
             val bundle = Bundle()
             bundle.putSerializable(KEY_SEARCH_MOVIES, query)
-            Log.d(SearchViewModel.TAG, ": getInstance $query")
+            Log.d(TAG, ": getInstance $query")
             instance.arguments = bundle
             instance.application = application
             return instance
@@ -92,7 +99,6 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         val view = inflater.inflate(R.layout.search_fragment, container, false)
         configBottomSheet(view)
         Log.d(SearchViewModel.TAG, ": onCreateView ")
-
         return view
     }
 
@@ -117,7 +123,7 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         super.onViewCreated(view, savedInstanceState)
         searchConfig(view.findViewById(R.id.search_view))
 
-        val adapter = PagingPageAdapter(this)
+        adapter = PagingPageAdapter(this)
         val gridLayoutManager: RecyclerView.LayoutManager
         val recyclerView = view.findViewById<RecyclerView>(R.id.search_recycle)
         val swipeRefreshLayout =
@@ -141,8 +147,8 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
         }
         lifecycleScope.launchWhenCreated {
             viewModel.searchMovies.collectLatest {
-                adapter.submitData(it)
                 Log.d(TAG, "launchWhenCreated: searchMovies append Data")
+                adapter.submitData(it)
             }
         }
         lifecycleScope.launchWhenCreated {
@@ -152,8 +158,38 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
                 .filter { it.refresh is LoadState.NotLoading }
                 .collect { recyclerView.scrollToPosition(0) } ///Обновляшка и сбрасовашка
         }
-
+        initTextBanner(view)
     }
+
+
+    private fun initTextBanner(view: View){
+        val textBanner = Banner(view.findViewById(R.id.status_text_view_search))
+        lifecycleScope.launchWhenCreated {
+            ConnectionObserver(view.context).observe(viewLifecycleOwner){
+                textBanner.submitState(it)
+            }
+        }
+        lifecycleScope.launchWhenCreated {
+            adapter.addLoadStateListener {
+                val loadState = it.refresh
+                val loadStateMediator = it.mediator
+                if (loadState is LoadState.Error) {
+                    textBanner.submitState(
+                        ConnectionState
+                            .Error
+                            .Download(loadState.error.localizedMessage ?: "Unreachable Error"))
+                }
+                if(loadStateMediator?.refresh is LoadState.NotLoading){
+                    textBanner.submitState(
+                        ConnectionState
+                            .Connected
+                            .Download("Data Updated"))
+                }
+            }
+        }
+    }
+
+
 
     @ExperimentalStdlibApi
     @ExperimentalSerializationApi
@@ -205,10 +241,8 @@ class SearchFragment : BottomSheetDialogFragment(), MovieClickListener {
 
     }
 
-    override fun onDestroyView() {
+    override fun onDestroy() {
         viewModel.clearSearchResults()
-        super.onDestroyView()
+        super.onDestroy()
     }
-
-
 }

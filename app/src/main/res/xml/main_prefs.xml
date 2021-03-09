@@ -34,7 +34,7 @@
         android:defaultValue="2"
         android:entries="@array/auto_update_time_names"
         android:entryValues="@array/auto_update_time_values"
-        android:key="regions_preference"
+        android:key="update_time_names"
         app:useSimpleSummaryProvider="true"
         app:icon="@drawable/ic_round_av_timer_24"
         android:title="Time Period"

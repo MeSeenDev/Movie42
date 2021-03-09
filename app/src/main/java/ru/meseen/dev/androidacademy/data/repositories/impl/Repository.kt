@@ -1,17 +1,19 @@
 package ru.meseen.dev.androidacademy.data.repositories.impl
 
 import android.app.Application
-import androidx.lifecycle.LiveData
+import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.data.MovieRemoteMediator
 import ru.meseen.dev.androidacademy.data.SearchRemoteMediator
@@ -21,6 +23,8 @@ import ru.meseen.dev.androidacademy.data.base.entity.CastEntity
 import ru.meseen.dev.androidacademy.data.base.entity.GenresEntity
 import ru.meseen.dev.androidacademy.data.base.entity.MovieAdditionalDataEntity
 import ru.meseen.dev.androidacademy.data.base.entity.MovieDataEntity
+import ru.meseen.dev.androidacademy.data.base.entity.relations.CastList
+import ru.meseen.dev.androidacademy.data.base.entity.relations.MovieDetailViewItems
 import ru.meseen.dev.androidacademy.data.base.entity.relations.MovieItemEntity
 import ru.meseen.dev.androidacademy.data.base.query.MovieByIdQuery
 import ru.meseen.dev.androidacademy.data.base.query.MovieListableQuery
@@ -31,6 +35,7 @@ import ru.meseen.dev.androidacademy.data.repositories.MovieListRepository
 import ru.meseen.dev.androidacademy.data.repositories.SearchRepository
 import ru.meseen.dev.androidacademy.data.retrofit.RetrofitClient
 import ru.meseen.dev.androidacademy.support.PreferencesKeys
+import java.util.*
 
 
 @ExperimentalSerializationApi
@@ -42,15 +47,24 @@ class Repository(val application: Application, val dataBase: RoomDataBase) :
 
     private val mainScope = (application as App).applicationScope
 
+    private val sharedPrefs: SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(application).apply {
+            registerOnSharedPreferenceChangeListener(prefsListener)
+        }
+
 
     @ExperimentalSerializationApi
     private val service = RetrofitClient.movieService
 
     init {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application)
+        updateGenres()
+    }
+
+    private fun updateGenres() {
         val languageQuery = sharedPrefs.getString(
-            PreferencesKeys.LANGUAGE_KEY.toString(),
-            PreferencesKeys.LANGUAGE_KEY.defaultKey) ?: PreferencesKeys.LANGUAGE_KEY.defaultKey
+            PreferencesKeys.LANGUAGE_KEY.key,
+            PreferencesKeys.LANGUAGE_KEY.defaultKey
+        ) ?: PreferencesKeys.LANGUAGE_KEY.defaultKey
 
         mainScope.launch(Dispatchers.IO) {
             val genresItems = service.getGenresList(languageQuery)
@@ -60,52 +74,43 @@ class Repository(val application: Application, val dataBase: RoomDataBase) :
         }
     }
 
-    private val movieID: MutableLiveData<MovieItemEntity> = MutableLiveData()
+
 
     @ExperimentalSerializationApi
     override fun loadMovieItem(
         query: MovieByIdQuery
-    ): LiveData<MovieItemEntity> {
-        mainScope.launch(Dispatchers.IO) {
-            movieID.postValue(
-                getMovieItemById(
-                    query.getMovieID(),
-                    query.getMoviesLanguage(),
-                    query.getAppendToResponse()
-                )
-            )
-        }
-        return movieID
-    }
+    ): Flow<MovieDetailViewItems> = flow {
+        val movieId: Int =query.getMovieID()
+        val language: String = query.getMoviesLanguage()
+        val appendToResponse: String = query.getAppendToResponse()
 
-    @ExperimentalSerializationApi
-    private suspend fun getMovieItemById(
-        movie_id: Int,
-        language: String,
-        appendToResponse: String
-    ): MovieItemEntity {
-        val movieResponse = service.getMovieById(movie_id.toString(), language, appendToResponse)
+
+        val list = mutableListOf<MovieDetailViewItems>()
+
+        val movieResponse = service.getMovieById(movieId.toString(), language, appendToResponse)
+        val genresItem =
+            movieResponse.genres.map { GenresEntity(it.genresId,
+                it.genresName.capitalize(Locale.ROOT), language) }
         val movieItem =
-            MovieAdditionalDataEntity(movieResponse, movieResponse.genres.joinToString())
-        val casts =
-            service.getMovieCastById(movie_id.toString(), language).cast.map {
+            MovieAdditionalDataEntity(movieResponse, genresItem)
+
+        emit(movieItem)
+
+        list.add(movieItem)
+
+        val casts = CastList(
+            service.getMovieCastById(movieId.toString(), language).cast.map {
                 CastEntity(
                     it,
                     language
                 )
-            }
-        val genresItem =
-            movieResponse.genres.map { GenresEntity(it.genresId, it.genresName, language) }
-        return MovieItemEntity(
-            movieAddData = movieItem,
-            castList = casts,
-            genresEntity = genresItem
-        )
-    }
+            })
 
-    override fun clearMovieItem() {
-        movieID.value = null
-    }
+        emit(casts)
+    }.flowOn(Dispatchers.IO)
+
+
+
 
 
     @ExperimentalPagingApi
@@ -130,14 +135,23 @@ class Repository(val application: Application, val dataBase: RoomDataBase) :
         dataBase.movieDao().getMovieList(query.getMoviePath())
     }.flow
 
-    override suspend fun clearSearchBDQuery(listType: String) =
-        dataBase.movieDao().clearSearchBDQuery(listType)
+    override fun clearSearchBDQuery(listType: String) {
+        mainScope.launch(Dispatchers.IO) {
+            dataBase.movieDao().clearSearchBDQuery(listType)
+        }
+    }
 
-    override fun getAllMovies(): List<MovieDataEntity> = dataBase.movieDao().getAllMoviesListsRepository()
+
+    override suspend fun getAllMovies(): List<MovieDataEntity> =
+        dataBase.movieDao().getAllMoviesListsRepository()
 
 
-
-
+    private val prefsListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == PreferencesKeys.LANGUAGE_KEY.key) {
+                updateGenres()
+            }
+        }
 
 
 }

@@ -2,8 +2,10 @@ package ru.meseen.dev.androidacademy.data.base.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import ru.meseen.dev.androidacademy.data.base.RoomDataBase.Companion.MOVIE_ADDITIONAL_TABLE_NAME
+import ru.meseen.dev.androidacademy.data.base.entity.relations.MovieDetailViewItems
 import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieAdditionalDataResponse
 
 
@@ -29,7 +31,7 @@ import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieAdditionalData
  * @see <a href="https://developers.themoviedb.org/3/movies/get-movie-details">API get Movie Details</a>
  */
 @Entity(
-    tableName = MOVIE_ADDITIONAL_TABLE_NAME,
+    tableName = MOVIE_ADDITIONAL_TABLE_NAME
 )
 data class MovieAdditionalDataEntity(
     @PrimaryKey
@@ -54,11 +56,8 @@ data class MovieAdditionalDataEntity(
     @ColumnInfo(name = "revenue")
     val revenue: Int,
 
-    @ColumnInfo(name = "genres_ids")
-    val genresIDs: String,
-
     @ColumnInfo(name = "cast_ids")
-    val castIDs: String,
+    val castIDs: String? = null,
 
     @ColumnInfo(name = "popularity")
     val popularity: Double,
@@ -101,8 +100,10 @@ data class MovieAdditionalDataEntity(
 
     @ColumnInfo(name = "status")
     val status: String
-) {
-    constructor(movie: MovieAdditionalDataResponse, genresIDs: String) : this(
+) : MovieDetailViewItems {
+    @Ignore var genresIDs: List<GenresEntity>? = null
+
+    constructor(movie: MovieAdditionalDataResponse, genresIDs: List<GenresEntity>) : this(
         id = movie.id,
         originalLanguage = movie.originalLanguage,
         imdbId = movie.imdbId,
@@ -110,8 +111,6 @@ data class MovieAdditionalDataEntity(
         title = movie.title,
         backdropPath = movie.backdropPath,
         revenue = movie.revenue,
-        genresIDs = movie.genres.map { it.genresId }.joinToString(),
-        castIDs = genresIDs,
         popularity = movie.popularity,
         voteCount = movie.voteCount,
         budget = movie.budget,
@@ -125,6 +124,8 @@ data class MovieAdditionalDataEntity(
         adult = movie.adult,
         homepage = movie.homepage,
         status = movie.status
-    )
+    ){
+        this.genresIDs = genresIDs
+    }
 
 }

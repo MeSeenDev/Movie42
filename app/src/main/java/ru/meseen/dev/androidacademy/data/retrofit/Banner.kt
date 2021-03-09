@@ -3,7 +3,8 @@ package ru.meseen.dev.androidacademy.data.retrofit
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.graphics.drawable.Drawable
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.TransitionDrawable
 import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -13,34 +14,39 @@ import com.google.android.material.textview.MaterialTextView
 import ru.meseen.dev.androidacademy.R
 
 class Banner(val view: MaterialTextView) : MaterialTextBanner {
-    
-    private var isShow = false
-    private var state: ConnectionState = ConnectionState.Connected.Network("Connected")
+
+    var isShow = false
+            private set
+    var state: ConnectionState = ConnectionState.Connected.Network("Connected")
+            private set
+    private val resources = view.resources
+
+    private val colorsAB = arrayOf(
+        ColorDrawable(ResourcesCompat.getColor(resources, R.color.colorPrimary, null)),
+        ColorDrawable(ResourcesCompat.getColor(resources, R.color.colorAccent, null))
+    )
+
+    private val transientBackground = TransitionDrawable(colorsAB)
+
 
     companion object {
         const val TAG = "Banner"
+        const val BACKGROUND_TRANSIENT_DURATION = 300
     }
 
     private fun show(state: ConnectionState) {
-        Log.d(TAG, "show: ")
+        customize(state)
         if (!isShow) {
-            customize(state)
-            StatusBanner.show(view = view)
+            AnimStatusBanner.show(view = view)
             isShow = true
-        } else {
-            customize(state)
         }
     }
 
     private fun dismiss(state: ConnectionState) {
-        Log.d(TAG, "dismiss: ")
-
+        customize(state)
         if (isShow) {
-            customize(state)
-            StatusBanner.dismiss(view = view)
+            AnimStatusBanner.dismiss(view = view)
             isShow = false
-        } else {
-            customize(state)
         }
     }
 
@@ -48,32 +54,23 @@ class Banner(val view: MaterialTextView) : MaterialTextBanner {
         val connectedDrawableId = R.drawable.ic_round_signal_wifi_4_bar_24
         val disconnectedDrawableId =
             R.drawable.ic_round_signal_wifi_statusbar_connected_no_internet_4_24
-
-        val connectedColor =
-            ResourcesCompat.getDrawable(view.context.resources, R.color.colorPrimary, null)
-        val disconnectedColor =
-            ResourcesCompat.getDrawable(view.context.resources, R.color.colorAccent, null)
-        
         when (state) {
-
             is ConnectionState.Error.Network -> {
-                bind(state.error, disconnectedDrawableId, disconnectedColor)
+                bind(state.error, disconnectedDrawableId, ColorTransient.FORWARD)
             }
             is ConnectionState.Connected.Network -> {
-                bind(state.status, connectedDrawableId, connectedColor)
+                bind(state.status, connectedDrawableId, ColorTransient.BACKWARD)
             }
-
             is ConnectionState.Error.Download -> {
-                bind(state.error, disconnectedDrawableId, disconnectedColor)
+                bind(state.error, disconnectedDrawableId, ColorTransient.FORWARD)
             }
             is ConnectionState.Connected.Download -> {
-                bind(state.status, connectedDrawableId, connectedColor)
+                bind(state.status, connectedDrawableId, ColorTransient.BACKWARD)
             }
         }
     }
 
-    private fun bind(text: String, @DrawableRes drawableId: Int, backgroundColor: Drawable?) {
-        Log.d(TAG, "bind: $text")
+    private fun bind(text: String, @DrawableRes drawableId: Int, transient: ColorTransient) {
         view.text = text
         view.setCompoundDrawablesWithIntrinsicBounds(
             drawableId,
@@ -81,7 +78,12 @@ class Banner(val view: MaterialTextView) : MaterialTextBanner {
             0,
             0
         )
-        view.background = backgroundColor
+        view.background = transientBackground
+        if (transient == ColorTransient.FORWARD) {
+            transientBackground.startTransition(BACKGROUND_TRANSIENT_DURATION)
+        } else {
+            transientBackground.reverseTransition(BACKGROUND_TRANSIENT_DURATION)
+        }
     }
 
     override fun submitState(newState: ConnectionState) {
@@ -104,10 +106,15 @@ class Banner(val view: MaterialTextView) : MaterialTextBanner {
     }
 }
 
+enum class ColorTransient {
+    FORWARD, BACKWARD
+}
+
 interface MaterialTextBanner {
     fun submitState(newState: ConnectionState)
 }
-object StatusBanner {
+
+private object AnimStatusBanner {
 
     private const val DURATION = 300L
 

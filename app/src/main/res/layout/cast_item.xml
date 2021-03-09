@@ -25,6 +25,7 @@
                 android:id="@+id/castImage"
                 android:layout_width="@dimen/cast_image_width"
                 android:layout_height="@dimen/cast_image_height"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/movie"
                 tools:ignore="ContentDescription" />
         </com.google.android.material.card.MaterialCardView>

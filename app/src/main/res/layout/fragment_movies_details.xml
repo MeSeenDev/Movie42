@@ -7,22 +7,26 @@
     android:background="@color/background"
     android:id="@+id/details_parent"
     android:transitionName="@string/details_transition"
-    tools:ignore="Overdraw">
-
+    >
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/status_text_view_search"
+        style="@style/Theme.Movie42.Banner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        tools:text="Some network status" />
     <androidx.core.widget.NestedScrollView
         android:id="@+id/parentDetails"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
-        app:behavior_overlapTop="@dimen/movie_details_nested_overlap_top"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detailsBottomSheet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:behavior_hideable="true"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            android:descendantFocusability="blocksDescendants"
             android:background="@android:color/transparent">
 
             <androidx.constraintlayout.widget.Guideline
@@ -93,6 +97,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/guideline_top"
+                tools:itemCount="1"
                 tools:listitem="@layout/movie_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

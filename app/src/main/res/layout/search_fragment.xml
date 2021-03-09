@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background"
-
     android:id="@+id/patentSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -21,11 +20,11 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="96dp">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="96dp"
                 android:background="@color/colorPrimary"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
@@ -46,8 +45,14 @@
                         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
                     <!-- android:cursorVisible="false" запомни героя )-->
                 </com.google.android.material.card.MaterialCardView>
-
             </com.google.android.material.appbar.CollapsingToolbarLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/status_text_view_search"
+                style="@style/Theme.Movie42.Banner"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                tools:text="Some network status" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

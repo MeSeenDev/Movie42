@@ -143,6 +143,7 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycleMain)
         recyclerView.setHasFixedSize(true)
+
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
 
@@ -269,21 +270,8 @@ class FragmentMoviesList : Fragment(), MovieClickListener {
             movieID = movieID,
             MOVIE_LIST_TAG
         )
-
-        fragment.sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.activity_main_frame
-            duration = 300L
-            scrimColor = Color.TRANSPARENT
-            setAllContainerColors(
-                ResourcesCompat.getColor(
-                    application.resources,
-                    R.color.background,
-                    null
-                )
-            )
-        }
         fragmentManager.apply {
-            addSharedElement(view, application.resources.getString(R.string.details_transition))
+            addSharedElement(view,view.resources.getString(R.string.details_transition))
             replace(
                 R.id.activity_main_frame,
                 fragment,

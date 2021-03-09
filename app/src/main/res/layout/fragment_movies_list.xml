@@ -13,22 +13,12 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/status_text_view"
+        style="@style/Theme.Movie42.Banner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="6dp"
-        android:gravity="center"
-        android:paddingStart="@dimen/status_margin"
-        android:paddingEnd="@dimen/status_margin"
-        android:ellipsize="end"
-        android:lines="1"
-        android:text="Some network status"
-        android:textColor="@color/label_text"
-        android:textSize="14sp"
-
-        app:drawableStartCompat="@drawable/ic_round_signal_wifi_statusbar_connected_no_internet_4_24" />
+        tools:text="Some network status" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/movies_list_toolbar"

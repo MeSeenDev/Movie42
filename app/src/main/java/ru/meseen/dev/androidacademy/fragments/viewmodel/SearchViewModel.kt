@@ -8,12 +8,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.data.base.query.MovieSearchQuery
 import ru.meseen.dev.androidacademy.data.base.query.impl.SearchViewQuery
@@ -28,7 +25,7 @@ class SearchViewModel(
     companion object {
         const val KEY_SEARCH_MOVIES = "KEY_SEARCH_MOVIES"
         val default = SearchViewQuery(query = "Star Wars",path = SEARCH_VIEW_LIST.selection)
-        const val TAG = "SearchViewModel"
+        const val TAG = "SearchFragment.VM"
     }
 
     init {
@@ -76,14 +73,11 @@ class SearchViewModel(
         handle.set(KEY_SEARCH_MOVIES, query)
     }
 
-
     fun clearSearchResults(){
-        viewModelScope.launch(Dispatchers.IO) {
             handle.get<MovieSearchQuery>(KEY_SEARCH_MOVIES)?.getMoviePath()?.let {
                 repository.clearSearchBDQuery(it)
             }
             handle.remove<MovieSearchQuery>(KEY_SEARCH_MOVIES)
-        }
     }
 
     override fun onCleared() {

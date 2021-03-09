@@ -7,5 +7,5 @@ import ru.meseen.dev.androidacademy.data.base.query.MovieSearchQuery
 
 interface SearchRepository {
     fun search(query: MovieSearchQuery, pageSize: Int): Flow<PagingData<MovieDataEntity>>
-    suspend fun clearSearchBDQuery(listType: String)
+    fun clearSearchBDQuery(listType: String)
 }
