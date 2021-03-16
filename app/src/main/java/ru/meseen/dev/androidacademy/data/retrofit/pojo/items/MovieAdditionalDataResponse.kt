@@ -42,7 +42,7 @@ data class MovieAdditionalDataResponse(
     val backdropPath: String? = null,
 
     @SerialName("revenue")
-    val revenue: Int = -1,
+    val revenue: Long = -1,
 
     @SerialName("genres")
     val genres: List<GenresItem> = listOf(),

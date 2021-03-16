@@ -15,7 +15,6 @@ import ru.meseen.dev.androidacademy.data.retrofit.pojo.items.MovieAdditionalData
  * @param voteCount: overview количество проголосовавших "votesCount"(vote_count)
  * @param title: Имя фильма Title
  * @param voteAverage: Рейтинг фильма от 0..10 "vote_average"
- * @param genresIDs: Жанры фильма
  * @param runtime: Длительность фильма "runtime" --!!
  * @param originalLanguage: язык оригинала фильма
  * @param originalTitle: Название на оригинальном (Родном) языке
@@ -54,7 +53,7 @@ data class MovieAdditionalDataEntity(
     val backdropPath: String?,
 
     @ColumnInfo(name = "revenue")
-    val revenue: Int,
+    val revenue: Long,
 
     @ColumnInfo(name = "cast_ids")
     val castIDs: String? = null,
@@ -101,7 +100,11 @@ data class MovieAdditionalDataEntity(
     @ColumnInfo(name = "status")
     val status: String
 ) : MovieDetailViewItems {
-    @Ignore var genresIDs: List<GenresEntity>? = null
+    /**
+     * genresIDs: Жанры фильма
+     */
+    @Ignore
+    var genresIDs: List<GenresEntity>? = null
 
     constructor(movie: MovieAdditionalDataResponse, genresIDs: List<GenresEntity>) : this(
         id = movie.id,
