@@ -17,9 +17,9 @@ import ru.meseen.dev.androidacademy.fragments.FragmentMoviesDetails
 import ru.meseen.dev.androidacademy.fragments.FragmentMoviesList
 import ru.meseen.dev.androidacademy.fragments.SearchFragment
 import ru.meseen.dev.androidacademy.fragments.settings.ActivitySettings
-import ru.meseen.dev.androidacademy.fragments.settings.MoviePrefsFragment
 import ru.meseen.dev.androidacademy.support.FragmentsTags
-import ru.meseen.dev.androidacademy.support.PreferencesKeys.*
+import ru.meseen.dev.androidacademy.support.PreferencesKeys.LANGUAGE_KEY
+import ru.meseen.dev.androidacademy.support.PreferencesKeys.REGION_KEY
 import ru.meseen.dev.androidacademy.workers.notifications.Tag
 
 @ExperimentalPagingApi
@@ -48,9 +48,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        val searchItem: MenuItem? = menu?.findItem(R.id.app_bar_search)
+        val searchItem: MenuItem? = menu.findItem(R.id.app_bar_search)
         searchView = searchItem?.actionView as SearchView
         searchView.setOnQueryTextListener(textListener)
         return super.onCreateOptionsMenu(menu)

@@ -19,7 +19,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.data.base.query.impl.MovieListQuery
 import ru.meseen.dev.androidacademy.data.repositories.MovieListRepository
 import ru.meseen.dev.androidacademy.data.repositories.impl.Repository
-import ru.meseen.dev.androidacademy.fragments.FragmentMoviesList
 import ru.meseen.dev.androidacademy.support.ListType
 import ru.meseen.dev.androidacademy.support.PreferencesKeys
 
@@ -93,7 +92,7 @@ class MovieViewModel(
     }
 
     fun forceSwitchTypeList(listType: ListType){
-        clearListCh.offer(Unit)
+        clearListCh.trySend(Unit)
         handle.set(KEY_MOVIES, listType.selection)
     }
 

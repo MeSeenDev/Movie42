@@ -29,8 +29,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
@@ -58,6 +58,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    implementation "androidx.room:room-paging:$rootProject.roomVersion"
 
     // Lifecycle Компоненты
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"

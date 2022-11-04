@@ -8,14 +8,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.meseen.dev.androidacademy.data.base.query.MovieSearchQuery
 import ru.meseen.dev.androidacademy.data.base.query.impl.SearchViewQuery
 import ru.meseen.dev.androidacademy.data.repositories.SearchRepository
-import ru.meseen.dev.androidacademy.support.ListType.*
+import ru.meseen.dev.androidacademy.support.ListType.SEARCH_VIEW_LIST
 
 class SearchViewModel(
     val repository: SearchRepository,
@@ -69,7 +70,7 @@ class SearchViewModel(
     @ExperimentalSerializationApi
     fun reQuery(query: SearchViewQuery) {
         if (checkIfTypeDataPresent(query)) return
-        clearListCh.offer(Unit)
+        clearListCh.trySend(Unit)
         handle.set(KEY_SEARCH_MOVIES, query)
     }
 

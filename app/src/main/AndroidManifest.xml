@@ -14,11 +14,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Movie42">
-        <activity android:name=".fragments.settings.ActivitySettings"
+        <activity
+            android:name=".fragments.settings.ActivitySettings"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/PreferenceScreen">
+            android:theme="@style/PreferenceScreen"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
@@ -26,7 +28,7 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
